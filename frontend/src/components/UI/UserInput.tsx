@@ -4,9 +4,10 @@ type Props = {
   name?: string;
   placeholder?: string;
   register: any;
+  registerModel: {},
 };
 
-const UserInput = ({ label, input, name, placeholder, register }: Props) => {
+const UserInput = ({ label, input, name, placeholder, register, registerModel }: Props) => {
   const inputClasses =
     "border rounded-md focus:outline-none w-full h-[45px] px-3 mb-2";
   const labelClasses = "text-xl";
@@ -20,7 +21,7 @@ const UserInput = ({ label, input, name, placeholder, register }: Props) => {
         id={name}
         className={inputClasses}
         placeholder={placeholder}
-        {...register(name, { required: true, maxLength: 20 })}
+        {...register(name, registerModel)}
       />
     </>
   );

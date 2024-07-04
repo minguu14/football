@@ -36,7 +36,7 @@ const register = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.json("회원가입 완료");
+    res.json({success: true, message: "회원가입 완료!!"});
   } catch (err) {
     next(err);
   }
