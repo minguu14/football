@@ -3,6 +3,7 @@ import UserSelect from "../components/UI/UserSelect";
 import { useForm } from "react-hook-form";
 import InputError from "../components/UI/InputError";
 import { useNavigate } from "react-router-dom";
+
 export const Register = () => {
   const navigate = useNavigate();
   const {
@@ -123,8 +124,8 @@ export const Register = () => {
           {errors.birthday?.type === "pattern" && (
             <InputError>생년월일 형식이 맞지 않습니다.</InputError>
           )}
-          <button className="border rounded-md w-full h-[45px] bg-orange-500 text-white mt-5">
-            제출
+          <button className="border rounded-md w-full h-[45px] bg-orange-400 text-white mt-5 hover:bg-orange-400">
+            가입하기
           </button>
         </div>
       </div>
