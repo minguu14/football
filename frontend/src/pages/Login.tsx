@@ -21,9 +21,10 @@ export const Login = () => {
         },
       });
       const resData = await res.json();
-      if (resData.success) {
-        navigate("/");
-      }
+      console.log(resData);
+      // if (resData.success) {
+      //   navigate("/");
+      // }
     } catch (err) {}
   };
   return (

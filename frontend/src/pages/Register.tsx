@@ -43,6 +43,7 @@ export const Register = () => {
         },
       });
       const resData = await res.json();
+      console.log(resData);
       if (resData.success) {
         navigate("/");
       }

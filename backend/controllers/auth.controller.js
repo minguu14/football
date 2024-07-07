@@ -1,9 +1,9 @@
-const UserModel = require("../models/user.model");
-const bcryptjs = require("bcryptjs");
-const errorHandler = require("../utils/error");
-const jwt = require("jsonwebtoken");
+import UserModel from "../models/user.model.js";
+import bcryptjs from "bcryptjs";
+import errorHandler from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
-const register = async (req, res, next) => {
+export const register = async (req, res, next) => {
   const { email, password, confirm_password, gender, name, birthday } =
     req.body;
 
@@ -12,7 +12,6 @@ const register = async (req, res, next) => {
     !password ||
     !gender ||
     !name ||
-    !email ||
     !birthday ||
     email === "" ||
     password === "" ||
@@ -20,11 +19,11 @@ const register = async (req, res, next) => {
     name === "" ||
     birthday === ""
   ) {
-    next(errorHandler(400, "입력값이 비어있습니다."));
+    return next(errorHandler(400, "입력값이 비어있습니다."));
   }
 
   if (password !== confirm_password) {
-    next(errorHandler(400, "비밀번호가 다릅니다."));
+    return next(errorHandler(400, "비밀번호가 다릅니다."));
   }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -40,34 +39,33 @@ const register = async (req, res, next) => {
     await newUser.save();
     res.json({ success: true, message: "회원가입 완료!!" });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
-module.exports = register;
-
-
-
-const login = async (req, res, next) => {
+export const login = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log(password);
-  if ((!email || !password || email === "", password === "")) {
-    errorHandler(400, "입력값이 비어있습니다.");
+
+  if (!email || !password || email === "" || password === "") {
+    return next(errorHandler(400, "입력값이 비어있습니다."));
   }
+
   try {
-    const findEmail = await UserModel.findOne({ email });
-    if (!findEmail) {
-      next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
+    const validEmail = await UserModel.findOne({ email });
+    if (!validEmail) {
+      return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
-    const findPassword = bcryptjs.compareSync(password, findEmail.password);
-    if (!findPassword) {
-      next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
+
+    const validPassword = bcryptjs.compareSync(password, validEmail.password);
+    if (!validPassword) {
+      return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
-    
+
+    const token = jwt.sign({ id: validEmail._id }, process.env.JWT_SECRET, {
+      httpOnly: true,
+    });
+    res.status(200).cookie("access_token", token).json(validEmail);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
-
-module.exports = login;
