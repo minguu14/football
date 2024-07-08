@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import UserInput from "../components/UI/UserInput";
 import { Link, useNavigate } from "react-router-dom";
 import InputError from "../components/UI/InputError";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { loginFailed, loginStart, loginSuccess } from "../store/userSlice";
 
 export const Login = () => {
+  const dispatch = useAppDispatch();
+  //const { user, loading, error } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const {
     register,
@@ -13,6 +17,7 @@ export const Login = () => {
 
   const onSubmit = async (data: any) => {
     try {
+      dispatch(loginStart());
       const res = await fetch("http://localhost:8080/login", {
         method: "POST",
         body: JSON.stringify(data),
@@ -22,10 +27,19 @@ export const Login = () => {
       });
       const resData = await res.json();
       console.log(resData);
-      // if (resData.success) {
-      //   navigate("/");
-      // }
-    } catch (err) {}
+
+      if(resData.success === false){
+        dispatch(loginFailed(resData.message));
+      }
+  
+      if (res.ok) {
+        dispatch(loginSuccess(resData));
+        navigate("/");
+      }
+
+    } catch (err) {
+      dispatch(loginFailed(err));
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-[110px]">
@@ -62,7 +76,7 @@ export const Login = () => {
           )}
           <div className="flex justify-between">
             <div className="flex gap-x-1 items-center">
-              <input type="checkbox" className="w-[15px] h-[15px]"/>
+              <input type="checkbox" className="w-[15px] h-[15px]" />
               아이디 저장
             </div>
             <Link to={"/"}>아이디/비밀번호 찾기</Link>

@@ -51,20 +51,22 @@ export const login = async (req, res, next) => {
   }
 
   try {
-    const validEmail = await UserModel.findOne({ email });
-    if (!validEmail) {
+    const validUser = await UserModel.findOne({ email });
+    if (!validUser) {
       return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
 
-    const validPassword = bcryptjs.compareSync(password, validEmail.password);
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
       return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
 
-    const token = jwt.sign({ id: validEmail._id }, process.env.JWT_SECRET, {
-      httpOnly: true,
-    });
-    res.status(200).cookie("access_token", token).json(validEmail);
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    
+    res
+      .status(200)
+      .cookie("access_token", token, { httpOnly: true })
+      .json(validUser);
   } catch (err) {
     return next(err);
   }

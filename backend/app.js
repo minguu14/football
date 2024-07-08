@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import dotenv from "dotenv";
@@ -12,6 +13,7 @@ const port = process.env.PORT || 8080;
 const uri = process.env.DB;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(cors());
 
 mongoose
