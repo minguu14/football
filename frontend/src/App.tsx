@@ -1,5 +1,4 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import "./App.css";
 import { HomePage } from "./pages/Home";
 import { Teams } from "./pages/Teams";
 import { Mercenary } from "./pages/Mercenary";

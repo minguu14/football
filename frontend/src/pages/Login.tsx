@@ -4,10 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import InputError from "../components/UI/InputError";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { loginFailed, loginStart, loginSuccess } from "../store/userSlice";
+import { useState } from "react";
+import { ErrorModal } from "../components/modal/ErrorModal";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-  //const { user, loading, error } = useAppSelector((state) => state.user);
+  const { error } = useAppSelector((state) => state.user);
+  const [errorModal, setErrorModal] = useState(false);
+  
   const navigate = useNavigate();
   const {
     register,
@@ -28,21 +32,24 @@ export const Login = () => {
       const resData = await res.json();
       console.log(resData);
 
-      if(resData.success === false){
+      if (resData.success === false) {
         dispatch(loginFailed(resData.message));
+        setErrorModal(true);
       }
-  
+
       if (res.ok) {
         dispatch(loginSuccess(resData));
         navigate("/");
       }
-
     } catch (err) {
       dispatch(loginFailed(err));
     }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-[110px]">
+      {errorModal && (
+        <ErrorModal errorMessage={error} onClose={() => setErrorModal(false)} />
+      )}
       <h2 className="text-4xl max-w-[1000px] mx-auto text-center font-bold">
         로 그 인
       </h2>
