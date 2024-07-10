@@ -1,7 +1,7 @@
 export const HomePage = () => {
   return (
     <>
-      <section className="flex flex-col gap-y-16 justify-center h-[700px] bg-[url(images/grass.jpg)] bg-cover bg-center">
+      <section className="flex flex-col gap-y-16 justify-center h-[700px] bg-[url(images/ball.jpg)] bg-cover bg-center">
         <p className="mx-auto text-5xl text-white">
           <strong>축구</strong> 용병을 찾아보자!
         </p>

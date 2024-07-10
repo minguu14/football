@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../hooks/redux";
+import { UserModal } from "./modal/UserModal";
 
 const Header = () => {
   const { user } = useAppSelector((state) => state.user);
+  const [isModal, setIsModal] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
   let classes =
     "fixed top-0 left-0 right-0 z-50 transition ease-in duration-500 bg-none";
@@ -27,6 +29,10 @@ const Header = () => {
       "fixed top-0 left-0 right-0 z-50 transition ease-in duration-500 bg-stone-200";
   }
 
+  function handleBtn() {
+    setIsModal(!isModal);
+  }
+
   return (
     <header className={classes}>
       <nav
@@ -46,10 +52,13 @@ const Header = () => {
           </li>
         </ul>
         {user ? (
-          <>
-            <button className="max-sm:hidden border rounded-[50%] w-[40px] h-[40px]">{user.name}</button>
+          <div className="relative">
+            {isModal && <UserModal setIsModal={setIsModal}/>}
+            <button className="max-sm:hidden border rounded-[50%] w-[40px] h-[40px]" onClick={handleBtn}>
+              {user.name}
+            </button>
             <button className="sm:hidden">햄버거</button>
-          </>
+          </div>
         ) : (
           <ul className="flex gap-x-5 items-center">
             <li className="max-sm:hidden hover:text-amber-300">

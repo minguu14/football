@@ -11,7 +11,7 @@ export const Login = () => {
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state) => state.user);
   const [errorModal, setErrorModal] = useState(false);
-  
+
   const navigate = useNavigate();
   const {
     register,
@@ -28,7 +28,9 @@ export const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
+
       const resData = await res.json();
       console.log(resData);
 

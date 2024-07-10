@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res, next) => {
   const { email, password, confirm_password, gender, name, birthday } =
     req.body;
-
   if (
     !email ||
     !password ||
@@ -61,12 +60,24 @@ export const login = async (req, res, next) => {
       return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    
-    res
-      .status(200)
-      .cookie("access_token", token, { httpOnly: true })
-      .json(validUser);
+    const accessToken = jwt.sign(
+      { id: validUser._id },
+      process.env.ACCESS_SECRET
+    );
+
+    const refreshToken = jwt.sign(
+      { id: validUser._id },
+      process.env.REFRESH_SECRET
+    );
+
+    res.cookie("accessToken", accessToken, { httpOnly: true });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true });
+    res.status(200).json(validUser);
+
+    // res
+    //   .status(200)
+    //   .cookie("access_token", token, { httpOnly: true })
+    //   .json(validUser);
   } catch (err) {
     return next(err);
   }

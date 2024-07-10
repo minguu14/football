@@ -14,7 +14,12 @@ const uri = process.env.DB;
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 mongoose
   .connect(uri)
