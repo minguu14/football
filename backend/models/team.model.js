@@ -3,10 +3,13 @@ const { Schema, model } = mongoose;
 
 const TeamSchema = new Schema(
   {
-    teamName: { type: String, required: true, unique: true },
-    teamLogo: { type: String, required: true },
-    members: { type: Number, required: true },
+    logo: { type: String },
+    name: { type: String, required: true, unique: true },
+    skill: { type: String, required: true },
+    manner: { type: String, required: true },
+    age: { type: String, required: true },
     area: { type: String, required: true },
+    introductions: { type: String, required: true },
   },
   { timestamps: true }
 );
