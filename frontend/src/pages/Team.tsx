@@ -3,11 +3,19 @@ import { useState } from "react";
 export const Team = () => {
   const [teamLogo, setTeamLogo] = useState<any>();
 
-  function handleSubmit(event: any) {
+  async function handleSubmit(event: any) {
     event.preventDefault();
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
-    console.log(data);
+    const res = await fetch("http://localhost:8080/createteam",{
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const resData = await res.json();
+    console.log(resData);
   }
 
   function handleImageChange(event: any) {
@@ -78,10 +86,10 @@ export const Team = () => {
               </select>
             </p>
             <p className="flex flex-col gap-y-1 w-[47%]">
-              <label htmlFor="skill">팀 매너</label>
+              <label htmlFor="manner">팀 매너</label>
               <select
-                id="skill"
-                name="skill"
+                id="manner"
+                name="manner"
                 className="border rounded-md w-full p-2"
               >
                 <option value="lowlowlow">하하하</option>
@@ -114,8 +122,8 @@ export const Team = () => {
           <p className="flex flex-col gap-y-1">
             <label htmlFor="introductions">팀 소개</label>
             <textarea
-              id="instructions"
-              name="instructions"
+              id="introductions"
+              name="introductions"
               rows={7}
               className="border rounded-md p-2"
             ></textarea>

@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
+import teamRouter from "./routes/team.route.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.listen(port, () => {
 });
 
 app.use("/", authRouter);
+app.use("/", teamRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
