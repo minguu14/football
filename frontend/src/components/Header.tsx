@@ -45,7 +45,7 @@ const Header = () => {
             <Link to={"/"}>로고</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
-            <Link to={"/teams"}>팀</Link>
+            <Link to={"/team"}>팀</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
             <Link to={"/mercenary"}>용병</Link>
@@ -54,7 +54,7 @@ const Header = () => {
         {user ? (
           <div className="relative">
             {isModal && <UserModal setIsModal={setIsModal}/>}
-            <button className="max-sm:hidden border rounded-[50%] w-[40px] h-[40px]" onClick={handleBtn}>
+            <button className="max-sm:hidden border rounded-[50%] w-[40px] h-[40px] bg-slate-300" onClick={handleBtn}>
               {user.name}
             </button>
             <button className="sm:hidden">햄버거</button>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/redux";
 import { logOut } from "../../store/userSlice";
 
@@ -7,20 +8,22 @@ type Props = {
 
 export const UserModal = ({ setIsModal }: Props) => {
   const dispatch = useAppDispatch();
+
   function handleBtn() {
     dispatch(logOut(null));
     setIsModal(false);
   }
+
   return (
     <div className="absolute border rounded-md w-48 top-10 right-[-75px]">
-      <div className="flex flex-col">
-        <button className="border-b p-3">유저정보</button>
-        <button className="border-b p-3">팀</button>
-        <button className="border-b p-3">용병</button>
-        <button className="p-3" onClick={handleBtn}>
-          로그아웃
+      <ul className="flex flex-col bg-white text-center">
+        <Link to={"/user"} onClick={() => setIsModal(false)}>
+          <li className="border-b p-3">유저정보</li>
+        </Link>
+        <button onClick={handleBtn}>
+          <li className="p-3">로그아웃</li>
         </button>
-      </div>
+      </ul>
     </div>
   );
 };

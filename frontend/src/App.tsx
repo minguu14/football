@@ -1,8 +1,8 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/Home";
-import { Teams } from "./pages/Teams";
+import { Team } from "./pages/Team";
 import { Mercenary } from "./pages/Mercenary";
-import { Login } from './pages/Login';
+import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import Header from "./components/Header";
 
@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/teams" element={<Teams />} />
+          <Route path="/team" element={<Team />} />
           <Route path="/mercenary" element={<Mercenary />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
