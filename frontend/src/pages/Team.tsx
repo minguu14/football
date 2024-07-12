@@ -1,21 +1,33 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Team = () => {
+  const navigate = useNavigate();
   const [teamLogo, setTeamLogo] = useState<any>();
 
   async function handleSubmit(event: any) {
     event.preventDefault();
     const fd = new FormData(event.target);
+
+    if (teamLogo) {
+      fd.append("logo", teamLogo);
+    }
+
     const data = Object.fromEntries(fd.entries());
-    const res = await fetch("http://localhost:8080/createteam",{
+    const res = await fetch("http://localhost:8080/createteam", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const resData = await res.json();
-    console.log(resData);
+    try {
+      const resData = await res.json();
+      console.log(resData);
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function handleImageChange(event: any) {
@@ -27,12 +39,10 @@ export const Team = () => {
     }
 
     const fileReader = new FileReader();
-
+    fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       setTeamLogo(fileReader.result);
     };
-
-    fileReader.readAsDataURL(file);
   }
 
   return (
@@ -43,15 +53,12 @@ export const Team = () => {
       >
         <div className="flex flex-col gap-y-5">
           <p className="flex items-end gap-x-3">
-            <div className="flex flex-col gap-y-1">
-              <label htmlFor="logo">팀 로고</label>
-              <img
-                src={teamLogo}
-                alt="team_logo"
-                className="border-4 w-[150px] h-[150px]"
-              />
-            </div>
-
+            <img
+              src={teamLogo}
+              alt="team_logo"
+              className="border-4 w-[150px] h-[150px] object-fill"
+            />
+            <label htmlFor="logo"></label>
             <input
               type="file"
               id="logo"

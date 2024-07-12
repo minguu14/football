@@ -1,7 +1,8 @@
 import express from "express";
-import { createTeam } from "../controllers/team.controller.js";
+import { createTeam, logo } from "../controllers/team.controller.js";
 const router = express.Router();
 
 router.post("/createteam", createTeam);
+router.get("/logo", logo);
 
 export default router;
