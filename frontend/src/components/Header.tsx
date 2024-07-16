@@ -45,7 +45,7 @@ const Header = () => {
             <Link to={"/"}>로고</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
-            <Link to={"/team"}>팀</Link>
+            <Link to={"/myteam"}>팀</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
             <Link to={"/mercenary"}>용병</Link>

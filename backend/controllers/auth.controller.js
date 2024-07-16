@@ -61,23 +61,29 @@ export const login = async (req, res, next) => {
     }
 
     const accessToken = jwt.sign(
-      { id: validUser._id },
-      process.env.ACCESS_SECRET
+      {
+        ...validUser._doc,
+        password: undefined,
+      },
+      process.env.ACCESS_SECRET,
+      { expiresIn: "10s" }
     );
 
     const refreshToken = jwt.sign(
-      { id: validUser._id },
+      {
+        email: validUser._email,
+        gender: validUser.gender,
+        name: validUser.name,
+        birthday: validUser.birthday,
+      },
       process.env.REFRESH_SECRET
     );
 
     res.cookie("accessToken", accessToken, { httpOnly: true });
     res.cookie("refreshToken", refreshToken, { httpOnly: true });
-    res.status(200).json(validUser);
 
-    // res
-    //   .status(200)
-    //   .cookie("access_token", token, { httpOnly: true })
-    //   .json(validUser);
+    const userInfo = jwt.verify(accessToken, process.env.ACCESS_SECRET);
+    res.status(200).json(userInfo);
   } catch (err) {
     return next(err);
   }

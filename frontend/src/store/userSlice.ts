@@ -31,9 +31,12 @@ const userSlice = createSlice({
     },
     logOut: (state, action) => {
       state.user = action.payload;
+    },
+    createTeam: (state, action) => {
+      state.user.myTeam = action.payload;
     }
   },
 });
 
 export default userSlice.reducer;
-export const { loginStart, loginSuccess, loginFailed, logOut } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailed, logOut, createTeam } = userSlice.actions;

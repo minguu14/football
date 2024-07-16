@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { createTeam } from "../store/userSlice";
 
 export const Team = () => {
   const navigate = useNavigate();
-  const [teamLogo, setTeamLogo] = useState<any>();
+  const [teamLogo, setTeamLogo] = useState<any>(null);
+  const userInfo = useAppSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
 
   async function handleSubmit(event: any) {
     event.preventDefault();
@@ -14,17 +18,22 @@ export const Team = () => {
     }
 
     const data = Object.fromEntries(fd.entries());
-    const res = await fetch("http://localhost:8080/createteam", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+
     try {
+      const res = await fetch("http://localhost:8080/createteam", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
       const resData = await res.json();
       console.log(resData);
-      navigate('/');
+      if (resData.success) {
+        dispatch(createTeam(resData.message));
+        navigate("/");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -34,7 +43,7 @@ export const Team = () => {
     const file = event.target.files[0];
 
     if (!file) {
-      setTeamLogo(null);
+      setTeamLogo("");
       return;
     }
 
@@ -44,6 +53,27 @@ export const Team = () => {
       setTeamLogo(fileReader.result);
     };
   }
+
+  useEffect(() => {
+    async function fetchUserTeam() {
+      try {
+        const res = await fetch("http://localhost:8080/getUserTeam", {
+          credentials: "include",
+        });
+        const resData = await res.json();
+        console.log(resData);
+        if (!userInfo) {
+          return navigate("/login");
+        }
+        if (res.ok) {
+          return navigate("/myteam");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchUserTeam();
+  }, []);
 
   return (
     <main className="w-[90%] mx-auto">
@@ -84,12 +114,12 @@ export const Team = () => {
                 name="skill"
                 className="border rounded-md w-full p-2"
               >
-                <option value="lowlowlow">하하하</option>
-                <option value="lowlow">하하</option>
-                <option value="low">하</option>
-                <option value="highhighhigh">상상상</option>
-                <option value="highhigh">상상</option>
-                <option value="high">상</option>
+                <option value="하하하">하하하</option>
+                <option value="하하">하하</option>
+                <option value="하">하</option>
+                <option value="상상상">상상상</option>
+                <option value="상상">상상</option>
+                <option value="상">상</option>
               </select>
             </p>
             <p className="flex flex-col gap-y-1 w-[47%]">
@@ -99,12 +129,12 @@ export const Team = () => {
                 name="manner"
                 className="border rounded-md w-full p-2"
               >
-                <option value="lowlowlow">하하하</option>
-                <option value="lowlow">하하</option>
-                <option value="low">하</option>
-                <option value="highhighhigh">상상상</option>
-                <option value="highhigh">상상</option>
-                <option value="high">상</option>
+                <option value="하하하">하하하</option>
+                <option value="하하">하하</option>
+                <option value="하">하</option>
+                <option value="상상상">상상상</option>
+                <option value="상상">상상</option>
+                <option value="상">상</option>
               </select>
             </p>
           </div>
