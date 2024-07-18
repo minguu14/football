@@ -37,7 +37,7 @@ export const createTeam = async (req, res, next) => {
 export const getUserTeam = async (req, res, next) => {
   const token = req.cookies.accessToken;
   if (!token) {
-    return next(errorHandler(401, "인증이 필요합니다."));
+    return next(errorHandler(401, "로그인이 필요합니다."));
   }
 
   let email;
@@ -59,4 +59,9 @@ export const getUserTeam = async (req, res, next) => {
     console.log(err);
     return errorHandler(500, "팀정보를 가져오는데 실패했습니다.");
   }
+};
+
+export const getMercenary = async (req, res, next) => {
+  const teams = await TeamModel.find({});
+  res.status(200).json(teams);
 };

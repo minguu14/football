@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import myTeam from "../../images/team.jpg";
+import { EditTeam } from "../components/EditTeam";
 
 export const MyTeam = () => {
   const [teamData, setTeamData] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [editMode, setEditMode] = useState(false);
+
+  function handleEdit() {
+    setEditMode(!editMode);
+  }
+
   useEffect(() => {
     async function fetchUserTeam() {
       try {
@@ -38,6 +45,10 @@ export const MyTeam = () => {
     );
   }
 
+  if (editMode) {
+    return <EditTeam teamData={teamData} setEditMode={setEditMode}/>;
+  }
+
   return (
     <>
       <ul className="mt-[200px]">
@@ -49,13 +60,18 @@ export const MyTeam = () => {
           />
         </li>
         <li>
-          <p>{teamData.name}</p>
+          <p>팀 이름 : {teamData.name}</p>
         </li>
-        <p>{teamData.skill}</p>
-        <p>{teamData.manner}</p>
-        <p>{teamData.age}</p>
-        <p>{teamData.area}</p>
-        <p>{teamData.introductions}</p>
+        <p>실력 : {teamData.skill}</p>
+        <p>매너 : {teamData.manner}</p>
+        <p>연령대 : {teamData.age}</p>
+        <p>지역 : {teamData.area}</p>
+        <p>팀 소개 : {teamData.introductions}</p>
+        <p>포메이션: 4231</p>
+        <Link to={"/recruitment"}>
+          <p>용병 모집하기</p>
+        </Link>
+        <button onClick={handleEdit}>수정</button>
       </ul>
     </>
   );

@@ -9,9 +9,21 @@ type Props = {
 export const UserModal = ({ setIsModal }: Props) => {
   const dispatch = useAppDispatch();
 
-  function handleBtn() {
-    dispatch(logOut(null));
-    setIsModal(false);
+  async function handleLogout() {
+    try {
+      const res = await fetch("http://localhost:8080/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      const resData = await res.json();
+      if (res.ok) {
+        dispatch(logOut(null));
+        setIsModal(false);
+      }
+      console.log(resData);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -20,7 +32,7 @@ export const UserModal = ({ setIsModal }: Props) => {
         <Link to={"/user"} onClick={() => setIsModal(false)}>
           <li className="border-b p-3">유저정보</li>
         </Link>
-        <button onClick={handleBtn}>
+        <button onClick={handleLogout}>
           <li className="p-3">로그아웃</li>
         </button>
       </ul>

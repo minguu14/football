@@ -60,31 +60,41 @@ export const login = async (req, res, next) => {
       return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
     }
 
+    console.log(validUser);
+
     const accessToken = jwt.sign(
       {
         ...validUser._doc,
         password: undefined,
       },
       process.env.ACCESS_SECRET,
-      { expiresIn: "10s" }
+      { expiresIn: "1h" }
     );
 
-    const refreshToken = jwt.sign(
-      {
-        email: validUser._email,
-        gender: validUser.gender,
-        name: validUser.name,
-        birthday: validUser.birthday,
-      },
-      process.env.REFRESH_SECRET
-    );
+    // const refreshToken = jwt.sign(
+    //   {
+    //     ...validUser._doc,
+    //     password: undefined,
+    //   },
+    //   process.env.REFRESH_SECRET,
+    //   { expiresIn: "1h" }
+    // );
 
     res.cookie("accessToken", accessToken, { httpOnly: true });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
+    // res.cookie("refreshToken", refreshToken, { httpOnly: true });
 
     const userInfo = jwt.verify(accessToken, process.env.ACCESS_SECRET);
     res.status(200).json(userInfo);
   } catch (err) {
-    return next(err);
+    return next(errorHandler(500, err));
+  }
+};
+
+export const logOut = (req, res, next) => {
+  try {
+    res.cookie("accessToken", "");
+    res.status(200).json("로그아웃 성공!");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };

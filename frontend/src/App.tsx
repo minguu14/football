@@ -1,36 +1,35 @@
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomePage } from "./pages/Home";
 import { Team } from "./pages/Team";
 import { Mercenary } from "./pages/Mercenary";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import Header from "./components/Header";
 import { MyTeam } from "./pages/MyTeam";
+import { Recruitment } from "./pages/Recruitment";
+import RootLayout from "./pages/Root";
+import Error from "./pages/Error";
+import MercenaryDetail from "./pages/MercenaryDetail";
 
-const Layout = () => {
-  return (
-    <>
-      <Header />
-      <Outlet />
-    </>
-  );
-};
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <Error />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "team", element: <Team /> },
+      { path: "myteam", element: <MyTeam /> },
+      { path: "recruitment", element: <Recruitment /> },
+      { path: "mercenary", element: <Mercenary /> },
+      { path: "mercenary/:teamId", element: <MercenaryDetail /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+    ],
+  },
+]);
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/myteam" element={<MyTeam />} />
-          <Route path="/mercenary" element={<Mercenary />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
