@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-const MercenaryCard = ({ team }: any) => {
+const MercenaryCard = ({ team, index }: any) => {
   return (
     <>
       <ul className="mt-[200px]">
-        <li>
+        <li key={index}>
           <Link to={team._id}>{team.name}</Link>
         </li>
       </ul>

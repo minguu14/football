@@ -1,48 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { createTeam } from "../store/userSlice";
+import { Form, redirect } from "react-router-dom";
 
-type Props = {
-  teamData: any;
-  setEditMode: any;
-};
-
-export const EditTeam = ({ teamData, setEditMode }: Props) => {
-  const navigate = useNavigate();
+export const TeamForm = ({ mode, teamData, method }: any) => {
   const [teamLogo, setTeamLogo] = useState<any>(null);
-  const userInfo = useAppSelector((state) => state.user.user);
-  const dispatch = useAppDispatch();
-
-  async function handleSubmit(event: any) {
-    event.preventDefault();
-    const fd = new FormData(event.target);
-
-    if (teamLogo) {
-      fd.append("logo", teamLogo);
-    }
-
-    const data = Object.fromEntries(fd.entries());
-
-    try {
-      const res = await fetch("http://localhost:8080/createteam", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const resData = await res.json();
-      console.log(resData);
-      if (resData.success) {
-        dispatch(createTeam(resData.message));
-        navigate("/");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   function handleImageChange(event: any) {
     const file = event.target.files[0];
@@ -55,41 +15,22 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
+      console.log(fileReader);
       setTeamLogo(fileReader.result);
     };
   }
 
-  useEffect(() => {
-    async function fetchUserTeam() {
-      try {
-        const res = await fetch("http://localhost:8080/getUserTeam", {
-          credentials: "include",
-        });
-        const resData = await res.json();
-        console.log(resData);
-        if (!userInfo) {
-          return navigate("/login");
-        }
-        if (res.ok) {
-          return navigate("/myteam");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchUserTeam();
-  }, []);
-
   return (
     <main className="w-[90%] mx-auto">
-      <form
+      <Form
+        method={method}
+        encType="multipart/form-data"
         className="w-[800px] mx-auto mt-[90px] flex flex-col"
-        onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-y-5">
           <p className="flex items-end gap-x-3">
             <img
-              src={teamData.logo}
+              src={teamData ? teamData.logo : teamLogo}
               alt="team_logo"
               className="border-4 w-[150px] h-[150px] object-fill"
             />
@@ -108,8 +49,8 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
               type="text"
               id="name"
               name="name"
-              value={teamData.name}
               className="border rounded-md w-full p-2"
+              defaultValue={teamData ? teamData.name : ""}
             />
           </p>
           <div className="flex justify-between">
@@ -119,7 +60,7 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
                 id="skill"
                 name="skill"
                 className="border rounded-md w-full p-2"
-                value={teamData.skill}
+                defaultValue={teamData ? teamData.skill : ""}
               >
                 <option value="하하하">하하하</option>
                 <option value="하하">하하</option>
@@ -135,7 +76,7 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
                 id="manner"
                 name="manner"
                 className="border rounded-md w-full p-2"
-                value={teamData.manner}
+                defaultValue={teamData ? teamData.manner : ""}
               >
                 <option value="하하하">하하하</option>
                 <option value="하하">하하</option>
@@ -153,7 +94,7 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
               id="age"
               name="age"
               className="border rounded-md w-full p-2"
-              value={teamData.age}
+              defaultValue={teamData ? teamData.age : ""}
             />
           </p>
           <p className="flex flex-col gap-y-1">
@@ -163,7 +104,7 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
               id="area"
               name="area"
               className="border rounded-md w-full p-2"
-              value={teamData.area}
+              defaultValue={teamData ? teamData.area : ""}
             />
           </p>
           <p className="flex flex-col gap-y-1">
@@ -173,14 +114,86 @@ export const EditTeam = ({ teamData, setEditMode }: Props) => {
               name="introductions"
               rows={7}
               className="border rounded-md p-2"
-              value={teamData.introductions}
+              defaultValue={teamData ? teamData.introductions : ""}
             ></textarea>
           </p>
         </div>
         <button className="border rounded-md px-5 py-2 text-white bg-orange-400 mt-5">
-          수정하기
+          {mode}
         </button>
-      </form>
+      </Form>
     </main>
   );
+};
+
+export const action = async ({ request }: any) => {
+  const method = request.method;
+  console.log(method);
+  const data = await request.formData();
+  const teamData = Object.fromEntries(data.entries());
+  let fetchUrl = "http://localhost:8080/createteam";
+
+  if (method === "POST") {
+    const reader = new FileReader();
+
+    reader.onloadend = async () => {
+      const logoUrl = reader.result;
+
+      const newTeam = {
+        ...teamData,
+        logo: logoUrl,
+      };
+
+      try {
+        const res = await fetch(fetchUrl, {
+          method: method,
+          body: JSON.stringify(newTeam),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        return res;
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    };
+    reader.readAsDataURL(teamData.logo);
+    return redirect("/");
+  }
+
+  if (method === "PATCH") {
+    console.log("업데이트");
+    fetchUrl = "http://localhost:8080/patchTeam";
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const logoUrl = reader.result;
+      const newTeam = {
+        ...teamData,
+        logo: logoUrl,
+      };
+
+      try {
+        const res = await fetch(fetchUrl, {
+          method: method,
+          body: JSON.stringify(newTeam),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        const resData = await res.json();
+        console.log(resData);
+        if (resData.success) {
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    };
+    reader.readAsDataURL(teamData.logo);
+    return redirect("/myteam");
+  }
 };

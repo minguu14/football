@@ -68,7 +68,7 @@ export const login = async (req, res, next) => {
         password: undefined,
       },
       process.env.ACCESS_SECRET,
-      { expiresIn: "1h" }
+      // { expiresIn: "1h" }
     );
 
     // const refreshToken = jwt.sign(

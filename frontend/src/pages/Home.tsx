@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useRouteLoaderData } from "react-router-dom";
 import teamImg from "../../images/team.jpg";
 
 export const HomePage = () => {

@@ -34,6 +34,40 @@ export const createTeam = async (req, res, next) => {
   });
 };
 
+export const patchTeam = async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
+    if (!decoded) {
+      return res.status(401).json({ message: "Token is not valid" });
+    }
+
+    const { email } = decoded;
+
+    const updateData = req.body;
+
+    const result = await TeamModel.findOneAndUpdate(
+      { owner: email },
+      { $set: updateData },
+      { new: true }
+    );
+
+    console.log(result);
+    if (!result) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    res.status(200).json({ message: 'Team updated successfully', team: result });
+  } catch (error) {
+    // console.error('Error updating team:', error);
+    // res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 export const getUserTeam = async (req, res, next) => {
   const token = req.cookies.accessToken;
   if (!token) {
@@ -41,6 +75,7 @@ export const getUserTeam = async (req, res, next) => {
   }
 
   let email;
+  
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
     email = decoded.email;
@@ -64,4 +99,10 @@ export const getUserTeam = async (req, res, next) => {
 export const getMercenary = async (req, res, next) => {
   const teams = await TeamModel.find({});
   res.status(200).json(teams);
+};
+
+export const getTeamDetail = async (req, res, next) => {
+  const teamId = req.params.id;
+  const selectedTeam = await TeamModel.findById(teamId);
+  res.status(200).json(selectedTeam);
 };

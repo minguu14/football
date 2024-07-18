@@ -1,24 +1,9 @@
-import { useEffect, useState } from "react";
+import { json, useLoaderData } from "react-router-dom";
 import MercenaryCard from "../components/MercenaryCard";
 
 export const Mercenary = () => {
-  const [teamData, setTeamData] = useState<any>([]);
+  const teamData: any = useLoaderData();
 
-  useEffect(() => {
-    async function fetchTeamData() {
-      try {
-        const res = await fetch("http://localhost:8080/getMercenary");
-        if (!res.ok) {
-          console.log("데이터가 없습니다.");
-        }
-        const resData = await res.json();
-        setTeamData(resData);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchTeamData();
-  }, []);
   return (
     <>
       {teamData.map((team: any, index: any) => (
@@ -26,4 +11,13 @@ export const Mercenary = () => {
       ))}
     </>
   );
+};
+
+export const Loader = async () => {
+  const res = await fetch("http://localhost:8080/getMercenary");
+  if (!res.ok) {
+    return json({ message: "데이터를 가져올 수 없습니다." });
+  } else {
+    return res;
+  }
 };
