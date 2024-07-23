@@ -1,4 +1,4 @@
-import { Link, useRouteLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import teamImg from "../../images/team.jpg";
 
 export const HomePage = () => {
@@ -21,7 +21,7 @@ export const HomePage = () => {
           to={"/team"}
           className="border rounded-lg h-[50px] w-[110px] p-3 bg-orange-400 text-white text-center"
         >
-          팀 등록하기
+          모집 등록
         </Link>
       </section>
       <section className="flex flex-col justify-center items-center mt-20">
@@ -34,7 +34,7 @@ export const HomePage = () => {
           to={"/mercenary"}
           className="border rounded-lg h-[50px] w-[110px] p-3 bg-orange-400 text-white text-center"
         >
-          살펴보기
+          살펴 보기
         </Link>
       </section>
     </>

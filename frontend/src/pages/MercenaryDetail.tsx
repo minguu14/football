@@ -6,21 +6,39 @@ const MercenaryDetail = () => {
     <>
       <ul className="mt-[200px]">
         <li>
-          <img
-            src={selectedTeam.logo}
-            alt="team_logo"
-            className="w-[150px] h-[150px] border-4"
-          />
-        </li>
-        <li>
           <p>팀 이름 : {selectedTeam.name}</p>
         </li>
-        <p>실력 : {selectedTeam.skill}</p>
-        <p>매너 : {selectedTeam.manner}</p>
-        <p>연령대 : {selectedTeam.age}</p>
-        <p>지역 : {selectedTeam.area}</p>
-        <p>팀 소개 : {selectedTeam.introductions}</p>
-        <p>포메이션: 4231</p>
+        <li>
+          <p>팀 실력 : {selectedTeam.skill}</p>
+        </li>
+        <li>
+          <p>팀 매너 : {selectedTeam.manner}</p>
+        </li>
+        <li>
+          <p>팀 연령대 : {selectedTeam.age}</p>
+        </li>
+        <li>
+          <p>경기 장소: {selectedTeam.place}</p>
+        </li>
+        <li>
+          <p>킥오프: {selectedTeam.kick_off}</p>
+        </li>
+        <li>
+          <p>경기 시간: {selectedTeam.play_time}</p>
+        </li>
+        <li>
+          <p>비용 : {selectedTeam.cost}</p>
+        </li>
+        <li>
+          <p>모집 인원 : {selectedTeam.people}</p>
+        </li>
+        <li>
+          <p>최소 쿼터 : {selectedTeam.quarter}</p>
+        </li>
+        <li>
+          <p>공지사항 : {selectedTeam.announcement}</p>
+        </li>
+
         <Link to=".." relative="path">
           뒤로가기
         </Link>

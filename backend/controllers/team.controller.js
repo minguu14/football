@@ -5,19 +5,37 @@ import jwt from "jsonwebtoken";
 
 export const createTeam = async (req, res, next) => {
   verifyToken(req, res, async () => {
-    const { age, area, introductions, manner, logo, name, skill } = req.body;
-
-    const logoValue = typeof logo === "string" ? logo : null;
+    const {
+      age,
+      announcement,
+      place,
+      cost,
+      kick_off,
+      play_time,
+      quarter,
+      people,
+      manner,
+      name,
+      skill,
+      positions,
+      formation,
+    } = req.body;
 
     const newTeam = new TeamModel({
-      logo: logoValue,
       name,
+      formation,
       skill,
       manner,
       age,
-      area,
-      introductions,
-      owner: req.owner,
+      place,
+      kick_off,
+      play_time,
+      positions,
+      people,
+      cost,
+      quarter,
+      announcement,
+      owner: req.user._id,
     });
     console.log(newTeam);
     try {
@@ -25,7 +43,6 @@ export const createTeam = async (req, res, next) => {
       res.json({
         success: true,
         message: "팀이 등록되었습니다!",
-        createdTeam: name,
       });
     } catch (err) {
       console.log(err);
@@ -61,38 +78,12 @@ export const patchTeam = async (req, res, next) => {
       return res.status(404).json({ message: "Team not found" });
     }
 
-    res.status(200).json({ message: 'Team updated successfully', team: result });
+    res
+      .status(200)
+      .json({ message: "Team updated successfully", team: result });
   } catch (error) {
     // console.error('Error updating team:', error);
     // res.status(500).json({ message: 'Internal server error' });
-  }
-};
-
-export const getUserTeam = async (req, res, next) => {
-  const token = req.cookies.accessToken;
-  if (!token) {
-    return next(errorHandler(401, "로그인이 필요합니다."));
-  }
-
-  let email;
-  
-  try {
-    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
-    email = decoded.email;
-  } catch (err) {
-    return next(errorHandler(403, "유효하지 않은 토큰입니다."));
-  }
-
-  try {
-    const userTeam = await TeamModel.findOne({ owner: email });
-    console.log(userTeam);
-    if (!userTeam) {
-      return next(errorHandler(404, "팀정보를 찾을 수 없습니다."));
-    }
-    res.status(200).json(userTeam);
-  } catch (err) {
-    console.log(err);
-    return errorHandler(500, "팀정보를 가져오는데 실패했습니다.");
   }
 };
 

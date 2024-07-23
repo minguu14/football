@@ -14,13 +14,13 @@ export const verifyToken = (req, res, next) => {
       return next(errorHandler(403, "유효하지 않은 토큰입니다."));
     }
     try {
-      const user = await UserModel.findOne({ email: decoded.email });
+      const user = await UserModel.findById(decoded._id);
       if (!user) {
         return next(errorHandler(404, "사용자를 찾을 수 없습니다."));
       }
-      req.owner = user.email;
+      req.user = user;
     } catch (err) {
-      return next(err);
+      next(err);
     }
 
     next();

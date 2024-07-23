@@ -18,14 +18,14 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    id: "myteam",
-    loader: myTeamLoader,
     errorElement: <Error />,
     children: [
       { index: true, element: <HomePage /> },
       { path: "team", element: <Team />, action: teamAction },
       {
         path: "myteam",
+        id: "myteam",
+        loader: myTeamLoader,
         children: [
           { index: true, element: <MyTeam /> },
           { path: "edit", element: <EditMyTeam />, action: teamAction },
