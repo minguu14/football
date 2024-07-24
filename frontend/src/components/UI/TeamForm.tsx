@@ -1,20 +1,8 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Form, redirect } from "react-router-dom";
 
-const POSITION = [
-  "LW",
-  "ST",
-  "RW",
-  "CAM",
-  "CM",
-  "CDM",
-  "LB",
-  "CB",
-  "RB",
-  "GK",
-  ,
-];
+const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
 
 export const TeamForm = ({ mode, teamData, method }: any) => {
   const [selectedPositions, setSelectedPositions] = useState<string[]>(
@@ -29,6 +17,23 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
         : [...prevPositions, position]
     );
   };
+
+  async function handleSearch() {
+    const res = await fetch(
+      `/v1/search/local.json?query=부평역&display=5&start=1&sort=random`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Naver-Client-Id": "RBG8ihMVjJb3ahHmVk7W",
+          "X-Naver-Client-Secret": "bNnmrKRsAx",
+        },
+      }
+    );
+    const resData = await res.json();
+    console.log(resData);
+  }
+
   return (
     <main className="w-[90%] mx-auto">
       <Form
@@ -106,14 +111,21 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
           </p>
           <p className="flex flex-col gap-y-1">
             <label htmlFor="place">경기 장소</label>
-            <input
-              type="text"
-              id="place"
-              name="place"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
-              required
-            />
+            <div className="flex">
+              <input
+                type="text"
+                id="place"
+                name="place"
+                className="border rounded-md w-full p-2"
+                defaultValue={teamData ? teamData.place : ""}
+                required
+              />
+              <button
+                className="border rounded-md w-[80px]"
+              >
+                검색
+              </button>
+            </div>
           </p>
           <p className="flex flex-col gap-y-1">
             <label htmlFor="kick_off">킥오프</label>

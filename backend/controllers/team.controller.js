@@ -89,7 +89,7 @@ export const patchTeam = async (req, res, next) => {
 
 export const getMercenary = async (req, res, next) => {
   const teams = await TeamModel.find({});
-  res.status(200).json(teams);
+  res.status(200).json(teams.reverse());
 };
 
 export const getTeamDetail = async (req, res, next) => {

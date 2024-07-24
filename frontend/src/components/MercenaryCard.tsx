@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const MercenaryCard = ({ team }: any) => {
   return (
     <>
-      <div className="border rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+      <div className="border rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-shadow duration-300" key={team._id}>
         <Link to={team._id}>
           <p className="text-xs text-gray-500 mb-1">{team.kick_off}</p>
           <h3 className="text-xl font-semibold text-gray-800 mb-2">

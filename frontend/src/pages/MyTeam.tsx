@@ -33,11 +33,11 @@ export const MyTeam = () => {
 };
 
 export const loader = async () => {
-  const res = await fetch("http://localhost:8080/getUserTeam", {
-    credentials: "include",
-  });
-  if (!res.ok) {
-    return json({ message: "데이터를 가져올 수 없습니다." });
-  }
-  return res;
+  // const res = await fetch("http://localhost:8080/getUserTeam", {
+  //   credentials: "include",
+  // });
+  // if (!res.ok) {
+  //   return json({ message: "데이터를 가져올 수 없습니다." });
+  // }
+  // return res;
 };
