@@ -9,6 +9,7 @@ export const createTeam = async (req, res, next) => {
       age,
       announcement,
       place,
+      address,
       cost,
       kick_off,
       play_time,
@@ -28,6 +29,7 @@ export const createTeam = async (req, res, next) => {
       manner,
       age,
       place,
+      address,
       kick_off,
       play_time,
       positions,
@@ -89,7 +91,7 @@ export const patchTeam = async (req, res, next) => {
 
 export const getMercenary = async (req, res, next) => {
   const teams = await TeamModel.find({});
-  res.status(200).json(teams);
+  res.status(200).json(teams.reverse());
 };
 
 export const getTeamDetail = async (req, res, next) => {

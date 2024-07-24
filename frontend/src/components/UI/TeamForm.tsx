@@ -1,25 +1,17 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Form, redirect } from "react-router-dom";
+import { AddressModal } from "../modal/AddressModal";
 
-const POSITION = [
-  "LW",
-  "ST",
-  "RW",
-  "CAM",
-  "CM",
-  "CDM",
-  "LB",
-  "CB",
-  "RB",
-  "GK",
-  ,
-];
+const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
 
 export const TeamForm = ({ mode, teamData, method }: any) => {
   const [selectedPositions, setSelectedPositions] = useState<string[]>(
     teamData ? teamData.positions : []
   );
+
+  const [address, setAddress] = useState({ address: "", title: "" });
+  const [addressModal, setAddressModal] = useState<boolean>(false);
 
   const handlePositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const position = e.target.value;
@@ -29,8 +21,18 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
         : [...prevPositions, position]
     );
   };
+  function handleSearch() {
+    setAddressModal(true);
+  }
+
   return (
     <main className="w-[90%] mx-auto">
+      {addressModal ? (
+        <AddressModal
+          onClose={() => setAddressModal(false)}
+          setAddress={setAddress}
+        />
+      ) : undefined}
       <Form
         method={method}
         encType="multipart/form-data"
@@ -104,17 +106,38 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               required
             />
           </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="place">경기 장소</label>
+          <div className="flex flex-col gap-y-1">
+            <label>경기 장소</label>
             <input
               type="text"
               id="place"
               name="place"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
-              required
+              defaultValue={
+                teamData
+                  ? teamData.place
+                  : address.title.replace(/<[^>]*>/g, "")
+              }
+              readOnly
             />
-          </p>
+            <div className="flex">
+              <input
+                type="text"
+                id="address"
+                name="address"
+                className="border rounded-md w-full p-2"
+                defaultValue={teamData ? teamData.place : address.address}
+                readOnly
+              />
+              <button
+                type="button"
+                onClick={handleSearch}
+                className="border rounded-md w-[80px]"
+              >
+                검색
+              </button>
+            </div>
+          </div>
           <p className="flex flex-col gap-y-1">
             <label htmlFor="kick_off">킥오프</label>
             <input
@@ -122,7 +145,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="kick_off"
               name="kick_off"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
+              defaultValue={teamData ? teamData.kick_off : ""}
               required
             />
           </p>
@@ -133,14 +156,14 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="play_time"
               name="play_time"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
+              defaultValue={teamData ? teamData.play_time : ""}
               placeholder="ex) 2시간"
               required
             />
           </p>
-          <p className="flex flex-col gap-y-1">
+          <div className="flex flex-col gap-y-1">
             <label htmlFor="positions">모집 포지션</label>
-            <div className="flex flex-wrap gap-2">
+            <p className="flex flex-wrap gap-2">
               {POSITION.map((position: any) => (
                 <label key={position} className="flex items-center gap-1">
                   <input
@@ -154,8 +177,8 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
                   {position}
                 </label>
               ))}
-            </div>
-          </p>
+            </p>
+          </div>
           <p className="flex flex-col gap-y-1">
             <label htmlFor="people">모집 인원</label>
             <input
@@ -214,6 +237,7 @@ export const action = async ({ request }: any) => {
   const data = await request.formData();
   const teamData = Object.fromEntries(data.entries());
   const date = dayjs(teamData.kick_off);
+  console.log(teamData);
   const formatDate = date.format("YY년 MM월 DD일 HH시 mm분");
   let fetchUrl = "http://localhost:8080/createteam";
 

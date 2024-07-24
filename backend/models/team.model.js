@@ -9,6 +9,7 @@ const TeamSchema = new Schema(
     manner: { type: String, required: true },
     age: { type: String, required: true },
     place: { type: String, required: true },
+    address: { type: String, required: true },
     kick_off: { type: String, required: true },
     play_time: { type: String, required: true },
     positions: { type: Array, required: true },

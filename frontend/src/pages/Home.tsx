@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import teamImg from "../../images/team.jpg";
+import { useAppSelector } from "../hooks/redux";
 
 export const HomePage = () => {
+  const { user } = useAppSelector((state) => state.user);
   return (
     <>
       <section className="flex flex-col gap-y-16 justify-center h-[700px] bg-[url(images/ball.jpg)] bg-cover bg-center">
@@ -16,9 +18,9 @@ export const HomePage = () => {
           <strong>내 팀을 등록하고 용병을 구해보자</strong>
         </h2>
         <p>팀을 등록하고 용병을 빠르고 쉽게 구해보세요!</p>
-        <img src={teamImg} alt="teamImg" className="w-[1000px] my-10"/>
+        <img src={teamImg} alt="teamImg" className="w-[1000px] my-10" />
         <Link
-          to={"/team"}
+          to={user ? "/team" : "/login"}
           className="border rounded-lg h-[50px] w-[110px] p-3 bg-orange-400 text-white text-center"
         >
           모집 등록
@@ -29,7 +31,7 @@ export const HomePage = () => {
           <strong>용병</strong>
         </h2>
         <p>용병 구하는 팀 정보를 한 눈에 살펴보자</p>
-        <img src={teamImg} alt="teamImg" className="w-[1000px] my-10"/>
+        <img src={teamImg} alt="teamImg" className="w-[1000px] my-10" />
         <Link
           to={"/mercenary"}
           className="border rounded-lg h-[50px] w-[110px] p-3 bg-orange-400 text-white text-center"
