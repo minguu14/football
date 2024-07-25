@@ -4,13 +4,15 @@ import {
   getMercenary,
   getTeamDetail,
   patchTeam,
+  deleteMercenary,
 } from "../controllers/team.controller.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.post("/createteam", verifyToken, createTeam);
-router.patch("/patchTeam", patchTeam);
+router.patch("/patchTeam/:id", patchTeam);
 router.get("/getMercenary", getMercenary);
 router.get("/getMercenaryDetail/:id", getTeamDetail);
+router.delete("/deleteMercenary/:id", deleteMercenary);
 
 export default router;

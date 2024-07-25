@@ -1,11 +1,40 @@
-import { Link, json, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  json,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import NaverMap from "../components/NaverMap";
 import { useAppSelector } from "../hooks/redux";
 
 const MercenaryDetail = () => {
   const selectedTeam: any = useLoaderData();
   const { user } = useAppSelector((state) => state.user);
-  console.log(user);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  async function deleteRecruitment() {
+    try {
+      const res = await fetch(
+        "http://localhost:8080/deleteMercenary/" + params.teamId,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+      const resData = await res.json();
+      console.log(resData);
+      if (!res.ok) {
+        console.log("삭제 실패");
+      }
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <div className="max-w-[1000px] mx-auto mt-[150px] px-4">
@@ -97,10 +126,16 @@ const MercenaryDetail = () => {
           </button>
         ) : (
           <div className="flex gap-7">
-            <button className="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300">
+            <Link
+              to={"edit"}
+              className="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300"
+            >
               모집 수정
-            </button>
-            <button className="bg-red-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300">
+            </Link>
+            <button
+              onClick={deleteRecruitment}
+              className="bg-red-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300"
+            >
               모집 삭제
             </button>
           </div>

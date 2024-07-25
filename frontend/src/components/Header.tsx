@@ -45,10 +45,10 @@ const Header = () => {
             <Link to={"/"}>로고</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
-            <Link to={"/myteam"}>팀</Link>
+            <Link to={"team"}>모집 등록</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
-            <Link to={"/mercenary"}>용병</Link>
+            <Link to={"mercenary"}>용병 모집</Link>
           </li>
         </ul>
         {user ? (

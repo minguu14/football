@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, redirect } from "react-router-dom";
 import { AddressModal } from "../modal/AddressModal";
+import { convertDateFormat } from "../../utils";
 
 const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
 
@@ -9,21 +10,31 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
   const [selectedPositions, setSelectedPositions] = useState<string[]>(
     teamData ? teamData.positions : []
   );
-
   const [address, setAddress] = useState({ address: "", title: "" });
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
   const handlePositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const position = e.target.value;
-    setSelectedPositions((prevPositions: any) =>
+    setSelectedPositions((prevPositions: string[]) =>
       prevPositions.includes(position)
-        ? prevPositions.filter((pos: any) => pos !== position)
+        ? prevPositions.filter((pos: string) => pos !== position)
         : [...prevPositions, position]
     );
   };
+
   function handleSearch() {
     setAddressModal(true);
   }
+
+  // 기존 주소 가져오기.
+  useEffect(() => {
+    if (teamData) {
+      setAddress({
+        title: teamData.place,
+        address: teamData.address,
+      });
+    }
+  }, []);
 
   return (
     <main className="w-[90%] mx-auto">
@@ -36,7 +47,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
       <Form
         method={method}
         encType="multipart/form-data"
-        className="w-[800px] mx-auto mt-[90px] flex flex-col"
+        className="w-[800px] mx-auto mt-[150px] flex flex-col"
       >
         <div className="flex flex-col gap-y-5">
           <p className="flex flex-col gap-y-1">
@@ -57,7 +68,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="formation"
               name="formation"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.name : ""}
+              defaultValue={teamData ? teamData.formation : ""}
               required
             />
           </p>
@@ -113,11 +124,8 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="place"
               name="place"
               className="border rounded-md w-full p-2"
-              defaultValue={
-                teamData
-                  ? teamData.place
-                  : address.title.replace(/<[^>]*>/g, "")
-              }
+              defaultValue={address.title.replace(/<[^>]*>/g, "")}
+              required
               readOnly
             />
             <div className="flex">
@@ -126,7 +134,8 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
                 id="address"
                 name="address"
                 className="border rounded-md w-full p-2"
-                defaultValue={teamData ? teamData.place : address.address}
+                defaultValue={address.address}
+                required
                 readOnly
               />
               <button
@@ -145,7 +154,9 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="kick_off"
               name="kick_off"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.kick_off : ""}
+              defaultValue={
+                teamData ? convertDateFormat(teamData.kick_off) : ""
+              }
               required
             />
           </p>
@@ -164,7 +175,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
           <div className="flex flex-col gap-y-1">
             <label htmlFor="positions">모집 포지션</label>
             <p className="flex flex-wrap gap-2">
-              {POSITION.map((position: any) => (
+              {POSITION.map((position: string) => (
                 <label key={position} className="flex items-center gap-1">
                   <input
                     type="checkbox"
@@ -186,7 +197,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="people"
               name="people"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
+              defaultValue={teamData ? teamData.people : ""}
               required
             />
           </p>
@@ -197,7 +208,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="cost"
               name="cost"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
+              defaultValue={teamData ? teamData.cost : ""}
               required
             />
           </p>
@@ -208,7 +219,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               id="quarter"
               name="quarter"
               className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.area : ""}
+              defaultValue={teamData ? teamData.quarter : ""}
               required
             />
           </p>
@@ -219,7 +230,7 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
               name="announcement"
               rows={7}
               className="border rounded-md p-2"
-              defaultValue={teamData ? teamData.introductions : ""}
+              defaultValue={teamData ? teamData.announcement : ""}
               required
             ></textarea>
           </p>
@@ -232,12 +243,11 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
   );
 };
 
-export const action = async ({ request }: any) => {
+export const action = async ({ request, params }: any) => {
   const method = request.method;
   const data = await request.formData();
   const teamData = Object.fromEntries(data.entries());
   const date = dayjs(teamData.kick_off);
-  console.log(teamData);
   const formatDate = date.format("YY년 MM월 DD일 HH시 mm분");
   let fetchUrl = "http://localhost:8080/createteam";
 
@@ -247,7 +257,6 @@ export const action = async ({ request }: any) => {
       kick_off: formatDate,
       positions: data.getAll("positions"),
     };
-    console.log(newTeam);
     try {
       const res = await fetch(fetchUrl, {
         method: method,
@@ -256,6 +265,31 @@ export const action = async ({ request }: any) => {
           "Content-Type": "application/json",
         },
         credentials: "include",
+      });
+
+      if (res.ok) {
+        return redirect("/");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  }
+
+  if (method === "PATCH") {
+    fetchUrl = "http://localhost:8080/patchTeam/" + params.teamId;
+
+    const updateTeam = {
+      ...teamData,
+      kick_off: formatDate,
+      positions: data.getAll("positions"),
+    };
+    try {
+      const res = await fetch(fetchUrl, {
+        method: method,
+        body: JSON.stringify(updateTeam),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (res.ok) {

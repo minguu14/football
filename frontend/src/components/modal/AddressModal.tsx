@@ -43,6 +43,7 @@ export const AddressModal = ({ onClose, setAddress }: Props) => {
     if (dialog.current) {
       dialog.current.close();
     }
+    onClose();
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

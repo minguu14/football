@@ -9,14 +9,11 @@ const NaverMap = ({ address }: any) => {
       return;
     }
 
-    console.log("Naver object loaded", naver);
-
     const map = new naver.maps.Map("map");
 
     naver.maps.Service.geocode(
       { query: address },
       function (status: any, response: any) {
-        console.log(response);
         if (status !== 200) {
           return alert("Something went wrong!");
         }

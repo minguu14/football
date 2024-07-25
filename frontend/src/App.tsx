@@ -11,7 +11,7 @@ import Error from "./pages/Error";
 import MercenaryDetail, {
   loader as mercenaryDetailLoader,
 } from "./pages/MercenaryDetail";
-import { EditMyTeam } from "./pages/EditMyTeam";
+import { EditMyTeam, loader as editLoader } from "./pages/EditMyTeam";
 import { action as teamAction } from "./components/UI/TeamForm";
 
 const router = createBrowserRouter([
@@ -26,10 +26,7 @@ const router = createBrowserRouter([
         path: "myteam",
         id: "myteam",
         loader: myTeamLoader,
-        children: [
-          { index: true, element: <MyTeam /> },
-          { path: "edit", element: <EditMyTeam />, action: teamAction },
-        ],
+        children: [{ index: true, element: <MyTeam /> }],
       },
       { path: "recruitment", element: <Recruitment /> },
       { path: "mercenary", element: <Mercenary />, loader: mercenaryLoader },
@@ -37,6 +34,12 @@ const router = createBrowserRouter([
         path: "mercenary/:teamId",
         element: <MercenaryDetail />,
         loader: mercenaryDetailLoader,
+      },
+      {
+        path: "mercenary/:teamId/edit",
+        element: <EditMyTeam />,
+        action: teamAction,
+        loader: editLoader,
       },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
