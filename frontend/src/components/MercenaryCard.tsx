@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../hooks/redux";
 
 const MercenaryCard = ({ team }: any) => {
+  const { user } = useAppSelector((state) => state.user);
   return (
     <>
-      <div className="border rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-shadow duration-300" key={team._id}>
-        <Link to={team._id}>
+      <div
+        className="border rounded-2xl p-5 shadow-lg hover:shadow-2xl transition-shadow duration-300"
+        key={team._id}
+      >
+        <Link to={user ? team._id : "/login"}>
           <p className="text-xs text-gray-500 mb-1">{team.kick_off}</p>
           <h3 className="text-xl font-semibold text-gray-800 mb-2">
             {team.place}

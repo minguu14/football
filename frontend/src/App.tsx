@@ -9,7 +9,7 @@ import { Recruitment } from "./pages/Recruitment";
 import RootLayout from "./pages/Root";
 import Error from "./pages/Error";
 import MercenaryDetail, {
-  loader as mercenaryDetailLoader,
+  loader as mercenaryDetailLoader
 } from "./pages/MercenaryDetail";
 import { EditMyTeam, loader as editLoader } from "./pages/EditMyTeam";
 import { action as teamAction } from "./components/UI/TeamForm";

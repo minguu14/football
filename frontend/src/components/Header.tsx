@@ -45,7 +45,7 @@ const Header = () => {
             <Link to={"/"}>로고</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
-            <Link to={"team"}>모집 등록</Link>
+            <Link to={user ? "team" : "login"}>모집 등록</Link>
           </li>
           <li className="max-sm:hidden hover:text-amber-300">
             <Link to={"mercenary"}>용병 모집</Link>

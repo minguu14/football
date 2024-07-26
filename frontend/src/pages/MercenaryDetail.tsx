@@ -1,16 +1,18 @@
 import {
   Link,
   json,
-  redirect,
   useLoaderData,
   useNavigate,
   useParams,
 } from "react-router-dom";
 import NaverMap from "../components/NaverMap";
 import { useAppSelector } from "../hooks/redux";
+import { useState } from "react";
+import { MercenaryModal } from "../components/modal/MercenaryModal";
 
 const MercenaryDetail = () => {
   const selectedTeam: any = useLoaderData();
+  const [mercenaryModal, setMercenaryModal] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.user);
   const params = useParams();
   const navigate = useNavigate();
@@ -115,13 +117,18 @@ const MercenaryDetail = () => {
           {selectedTeam.announcement}
         </p>
       </section>
-
+      {mercenaryModal && (
+        <MercenaryModal onClose={() => setMercenaryModal(false)} />
+      )}
       <div className="flex justify-between items-center">
         <Link to=".." relative="path" className="text-blue-500 hover:underline">
           뒤로가기
         </Link>
         {user._id !== selectedTeam.owner ? (
-          <button className="bg-orange-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-orange-600 transition-colors duration-300">
+          <button
+            onClick={() => setMercenaryModal(true)}
+            className="bg-orange-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-orange-600 transition-colors duration-300"
+          >
             용병 신청
           </button>
         ) : (

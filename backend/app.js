@@ -5,7 +5,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import teamRouter from "./routes/team.route.js";
+import mercenaryRouter from "./routes/mercenary.route.js";
 import dotenv from "dotenv";
+
 
 dotenv.config();
 const app = express();
@@ -37,6 +39,7 @@ app.listen(port, () => {
 
 app.use("/", authRouter);
 app.use("/", teamRouter);
+app.use("/", mercenaryRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.status || 500;
