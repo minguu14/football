@@ -1,12 +1,19 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
-import { Form, redirect } from "react-router-dom";
+import { ActionFunctionArgs, Form, FormMethod, redirect } from "react-router-dom";
 import { AddressModal } from "../modal/AddressModal";
 import { convertDateFormat } from "../../utils";
+import { Team } from "../../models";
 
 const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
 
-export const TeamForm = ({ mode, teamData, method }: any) => {
+type Props = {
+  mode: string;
+  teamData: Team | null;
+  method: FormMethod | undefined;
+};
+
+export const TeamForm = ({ mode, teamData, method }: Props) => {
   const [selectedPositions, setSelectedPositions] = useState<string[]>(
     teamData ? teamData.positions : []
   );
@@ -243,11 +250,11 @@ export const TeamForm = ({ mode, teamData, method }: any) => {
   );
 };
 
-export const action = async ({ request, params }: any) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const method = request.method;
   const data = await request.formData();
   const teamData = Object.fromEntries(data.entries());
-  const date = dayjs(teamData.kick_off);
+  const date = dayjs(teamData.kick_off as string);
   const formatDate = date.format("YY년 MM월 DD일 HH시 mm분");
   let fetchUrl = "http://localhost:8080/createteam";
 

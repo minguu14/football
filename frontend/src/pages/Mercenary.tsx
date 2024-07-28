@@ -1,8 +1,10 @@
 import { json, useLoaderData } from "react-router-dom";
 import MercenaryCard from "../components/MercenaryCard";
+import { Team } from "../models";
 
 export const Mercenary = () => {
-  const teamData: any = useLoaderData();
+  const teamData = useLoaderData() as Team[];
+  
   return (
     <div className="max-w-[1000px] mx-auto px-3 mt-[200px]">
       <h1 className="mx-auto text-4xl my-2">
@@ -20,7 +22,7 @@ export const Mercenary = () => {
         </li>
       </ul>
       <main className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto max-w-[1000px] gap-5">
-        {teamData.map((team: any) => (
+        {teamData.map((team) => (
           <MercenaryCard team={team} key={team._id}/>
         ))}
       </main>

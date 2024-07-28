@@ -1,12 +1,13 @@
-import { json, useLoaderData } from "react-router-dom";
+import { json, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { TeamForm } from "../components/UI/TeamForm";
+import { Team } from "../models";
 
 export const EditMyTeam = () => {
-  const teamData = useLoaderData();
+  const teamData = useLoaderData() as Team;
   return <TeamForm mode="수정" teamData={teamData} method="patch" />;
 };
 
-export const loader = async ({ params }: any) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const id = params.teamId;
   const res = await fetch("http://localhost:8080/getMercenaryDetail/" + id);
   if (!res.ok) {

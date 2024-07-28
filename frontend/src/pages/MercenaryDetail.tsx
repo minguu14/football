@@ -1,5 +1,6 @@
 import {
   Link,
+  LoaderFunctionArgs,
   json,
   useLoaderData,
   useNavigate,
@@ -9,9 +10,10 @@ import NaverMap from "../components/NaverMap";
 import { useAppSelector } from "../hooks/redux";
 import { useState } from "react";
 import { MercenaryModal } from "../components/modal/MercenaryModal";
+import { Team } from "../models";
 
 const MercenaryDetail = () => {
-  const selectedTeam: any = useLoaderData();
+  const selectedTeam = useLoaderData() as Team;
   const [mercenaryModal, setMercenaryModal] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.user);
   const params = useParams();
@@ -154,7 +156,7 @@ const MercenaryDetail = () => {
 
 export default MercenaryDetail;
 
-export const loader = async ({ params }: any) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const id = params.teamId;
   const res = await fetch("http://localhost:8080/getMercenaryDetail/" + id);
   if (!res.ok) {

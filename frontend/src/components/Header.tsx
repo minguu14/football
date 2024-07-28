@@ -5,8 +5,8 @@ import { UserModal } from "./modal/UserModal";
 
 const Header = () => {
   const { user } = useAppSelector((state) => state.user);
-  const [isModal, setIsModal] = useState(false);
-  const [isScroll, setIsScroll] = useState(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [isScroll, setIsScroll] = useState<boolean>(false);
   let classes =
     "fixed top-0 left-0 right-0 z-50 transition ease-in duration-500 bg-none";
 

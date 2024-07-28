@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import UserInput from "../components/UI/UserInput";
 import { Link, useNavigate } from "react-router-dom";
 import InputError from "../components/UI/InputError";
@@ -19,7 +19,7 @@ export const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       dispatch(loginStart());
       const res = await fetch("http://localhost:8080/login", {

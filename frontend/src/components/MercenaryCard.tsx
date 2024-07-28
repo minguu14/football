@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../hooks/redux";
+import { Team } from "../models";
 
-const MercenaryCard = ({ team }: any) => {
+type Props = {
+  team: Team;
+};
+
+const MercenaryCard = ({ team }: Props) => {
   const { user } = useAppSelector((state) => state.user);
   return (
     <>

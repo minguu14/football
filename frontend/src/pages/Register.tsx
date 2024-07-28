@@ -1,6 +1,6 @@
 import UserInput from "../components/UI/UserInput";
 import UserSelect from "../components/UI/UserSelect";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/UI/InputError";
 import { useNavigate } from "react-router-dom";
 
@@ -33,7 +33,7 @@ export const Register = () => {
     },
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await fetch("http://localhost:8080/register", {
         method: "POST",
