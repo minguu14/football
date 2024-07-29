@@ -48,7 +48,7 @@ const MercenaryDetail = () => {
           <NaverMap address={selectedTeam.address} />
         </div>
         <p className="mt-2 text-lg font-medium text-gray-700">
-          {selectedTeam.place}
+          {selectedTeam.place} <a href={`https://map.naver.com/p/search/${selectedTeam.place}`} target="_blank" className="text-blue-600">길 찾기</a>
         </p>
         <p className="mt-2 text-lg font-medium text-gray-700">
           {selectedTeam.address}
