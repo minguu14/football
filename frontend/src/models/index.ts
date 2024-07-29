@@ -20,9 +20,17 @@ export type Team = {
 };
 
 export type User = {
-    email: string;
-    password: string;
-    gender: string;
-    name: string;
-    birthday: string;
-}
+  email: string;
+  password: string;
+  gender: string;
+  name: string;
+  birthday: string;
+};
+
+export type MercenaryLists = {
+  _id: string;
+  real_name: string;
+  contact: string;
+  positions: string[];
+  player: string | null;
+};
