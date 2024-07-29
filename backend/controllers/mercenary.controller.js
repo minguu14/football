@@ -1,5 +1,7 @@
 import MercenaryModel from "../models/mercenary.model.js";
+import TeamModel from "../models/team.model.js";
 import errorHandler from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
 export const mercenary = async (req, res, next) => {
   const { real_name, contact, positions, player, teamId } = req.body;
@@ -22,7 +24,15 @@ export const mercenary = async (req, res, next) => {
 
 export const getMercenaryList = async (req, res, next) => {
   try {
-    const mercenaryLists = await MercenaryModel.find({});
+    const token = req.cookies.accessToken;
+    const owner = jwt.verify(token, process.env.ACCESS_SECRET);
+    const ownerTeam = await TeamModel.find({ owner: owner._id });
+    const ownerTeamIds = ownerTeam.map((team) => team._id);
+    const mercenaryLists = await MercenaryModel.find({
+      mercenary_teamId: { $in: ownerTeamIds },
+    });
+    console.log(mercenaryLists);
+
     if (mercenaryLists) {
       res.json(mercenaryLists);
     } else {
