@@ -31,7 +31,6 @@ export const getMercenaryList = async (req, res, next) => {
     const mercenaryLists = await MercenaryModel.find({
       mercenary_teamId: { $in: ownerTeamIds },
     });
-    console.log(mercenaryLists);
 
     if (mercenaryLists) {
       res.json(mercenaryLists);
