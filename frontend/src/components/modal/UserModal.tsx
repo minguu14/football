@@ -34,7 +34,12 @@ export const UserModal = ({ setIsModal }: Props) => {
         </Link>
         <Link to={"/mercenarylist"} onClick={() => setIsModal(false)}>
           <li className="border-b p-3 flex justify-center items-center gap-x-1">
-            <span>신청</span>
+            <span>용병 리스트</span>
+          </li>
+        </Link>
+        <Link to={"/mercenarylist"} onClick={() => setIsModal(false)}>
+          <li className="border-b p-3 flex justify-center items-center gap-x-1">
+            <span>모집 리스트</span>
           </li>
         </Link>
 

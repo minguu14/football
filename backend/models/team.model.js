@@ -14,6 +14,7 @@ const TeamSchema = new Schema(
     play_time: { type: String, required: true },
     positions: { type: Array, required: true },
     people: { type: String, required: true },
+    recruited_people: { type: Array},
     cost: { type: String, required: true },
     quarter: { type: String, required: true },
     announcement: { type: String, required: true },

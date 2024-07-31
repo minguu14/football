@@ -125,7 +125,7 @@ export const Register = () => {
           {errors.birthday?.type === "pattern" && (
             <InputError>생년월일 형식이 맞지 않습니다.</InputError>
           )}
-          <button className="border rounded-md w-full h-[45px] bg-orange-400 text-white mt-5 hover:bg-orange-400">
+          <button className="border rounded-md w-full h-[45px] bg-orange-400 hover:bg-orange-500 text-white mt-5 hover:bg-orange-400">
             가입하기
           </button>
         </div>

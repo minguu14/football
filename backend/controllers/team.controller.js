@@ -52,7 +52,6 @@ export const createTeam = async (req, res, next) => {
   });
 };
 
-
 export const patchTeam = async (req, res, next) => {
   try {
     const teamId = req.params.id;
@@ -79,19 +78,17 @@ export const patchTeam = async (req, res, next) => {
   }
 };
 
-
 export const deleteMercenary = async (req, res, next) => {
   const teamId = req.params.id;
+  console.log(teamId);
   await TeamModel.deleteOne({ _id: teamId });
   res.status(200).json("모집 삭제");
 };
-
 
 export const getMercenary = async (req, res, next) => {
   const teams = await TeamModel.find({});
   res.status(200).json(teams.reverse());
 };
-
 
 export const getTeamDetail = async (req, res, next) => {
   const teamId = req.params.id;

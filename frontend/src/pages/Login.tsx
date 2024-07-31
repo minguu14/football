@@ -91,7 +91,7 @@ export const Login = () => {
             <Link to={"/"}>아이디/비밀번호 찾기</Link>
           </div>
 
-          <button className="border rounded-md w-full h-[45px] bg-orange-400 text-white mt-5">
+          <button className="border rounded-md w-full h-[45px] bg-orange-400 hover:bg-orange-500 text-white mt-5">
             로그인
           </button>
           <div className="flex flex-col gap-y-1 border-t mt-7">

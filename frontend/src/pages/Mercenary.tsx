@@ -1,3 +1,4 @@
+// Mercenary.tsx
 import { json, useLoaderData } from "react-router-dom";
 import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
@@ -6,26 +7,22 @@ export const Mercenary = () => {
   const teamData = useLoaderData() as Team[];
   
   return (
-    <div className="max-w-[1000px] mx-auto px-3 mt-[200px]">
-      <h1 className="mx-auto text-4xl my-2">
-        팀 목록
-      </h1>
-      <ul className="flex items-center gap-3 mx-auto my-5">
-        <li>
-          <button className="border rounded-2xl py-2 px-5">지역</button>
-        </li>
-        <li>
-          <button className="border rounded-2xl py-2 px-5">포지션</button>
-        </li>
-        <li>
-          <button className="border rounded-2xl py-2 px-5">모집중</button>
-        </li>
-      </ul>
-      <main className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto max-w-[1000px] gap-5">
-        {teamData.map((team) => (
-          <MercenaryCard team={team} key={team._id}/>
-        ))}
-      </main>
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-[100px]">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-5xl font-extrabold text-gray-900 mb-10 text-center">
+          팀 목록
+        </h1>
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">지역</button>
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">포지션</button>
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">모집중</button>
+        </div>
+        <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {teamData.map((team) => (
+            <MercenaryCard team={team} key={team._id}/>
+          ))}
+        </main>
+      </div>
     </div>
   );
 };

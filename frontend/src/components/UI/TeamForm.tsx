@@ -33,7 +33,6 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
     setAddressModal(true);
   }
 
-  // 기존 주소 가져오기.
   useEffect(() => {
     if (teamData) {
       setAddress({
@@ -44,103 +43,71 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
   }, []);
 
   return (
-    <main className="w-[90%] mx-auto">
-      {addressModal ? (
+    <main className="min-h-screen py-10">
+      {addressModal && (
         <AddressModal
           onClose={() => setAddressModal(false)}
           setAddress={setAddress}
         />
-      ) : undefined}
+      )}
       <Form
         method={method}
         encType="multipart/form-data"
-        className="w-[800px] mx-auto mt-[150px] flex flex-col"
+        className="max-w-3xl mx-auto mt-10 shadow-lg rounded-lg p-8"
       >
-        <div className="flex flex-col gap-y-5">
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="name">팀 이름</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.name : ""}
-              required
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">팀 정보 {mode}</h2>
+        <div className="space-y-6">
+          <InputField
+            id="name"
+            label="팀 이름"
+            defaultValue={teamData?.name}
+            required
+          />
+          <InputField
+            id="formation"
+            label="팀 포메이션"
+            defaultValue={teamData?.formation}
+            required
+          />
+          <div className="flex gap-4">
+            <SelectField
+              id="skill"
+              label="팀 실력"
+              options={["하하하", "하하", "하", "상상상", "상상", "상"]}
+              defaultValue={teamData?.skill}
+              className="w-full"
             />
-          </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="formation">팀 포메이션</label>
-            <input
-              type="text"
-              id="formation"
-              name="formation"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.formation : ""}
-              required
+            <SelectField
+              id="manner"
+              label="팀 매너"
+              options={["하하하", "하하", "하", "상상상", "상상", "상"]}
+              defaultValue={teamData?.manner}
+              className="w-full"
             />
-          </p>
-          <div className="flex justify-between">
-            <p className="flex flex-col gap-y-1 w-[47%]">
-              <label htmlFor="skill">팀 실력</label>
-              <select
-                id="skill"
-                name="skill"
-                className="border rounded-md w-full p-2"
-                defaultValue={teamData ? teamData.skill : ""}
-              >
-                <option value="하하하">하하하</option>
-                <option value="하하">하하</option>
-                <option value="하">하</option>
-                <option value="상상상">상상상</option>
-                <option value="상상">상상</option>
-                <option value="상">상</option>
-              </select>
-            </p>
-            <p className="flex flex-col gap-y-1 w-[47%]">
-              <label htmlFor="manner">팀 매너</label>
-              <select
-                id="manner"
-                name="manner"
-                className="border rounded-md w-full p-2"
-                defaultValue={teamData ? teamData.manner : ""}
-              >
-                <option value="하하하">하하하</option>
-                <option value="하하">하하</option>
-                <option value="하">하</option>
-                <option value="상상상">상상상</option>
-                <option value="상상">상상</option>
-                <option value="상">상</option>
-              </select>
-            </p>
           </div>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="age">팀 연령대</label>
-            <input
-              type="text"
-              id="age"
-              name="age"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.age : ""}
-              required
-            />
-          </p>
-          <div className="flex flex-col gap-y-1">
-            <label>경기 장소</label>
+          <InputField
+            id="age"
+            label="팀 연령대"
+            defaultValue={teamData?.age}
+            required
+          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">경기 장소</label>
             <input
               type="text"
               id="place"
               name="place"
-              className="border rounded-md w-full p-2"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
               defaultValue={address.title.replace(/<[^>]*>/g, "")}
               required
               readOnly
             />
-            <div className="flex">
+            <div className="flex mt-2">
               <input
                 type="text"
                 id="address"
                 name="address"
-                className="border rounded-md w-full p-2"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
                 defaultValue={address.address}
                 required
                 readOnly
@@ -148,107 +115,119 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
               <button
                 type="button"
                 onClick={handleSearch}
-                className="border rounded-md w-[80px]"
+                className="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-400 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
               >
                 검색
               </button>
             </div>
           </div>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="kick_off">킥오프</label>
-            <input
-              type="datetime-local"
-              id="kick_off"
-              name="kick_off"
-              className="border rounded-md w-full p-2"
-              defaultValue={
-                teamData ? convertDateFormat(teamData.kick_off) : ""
-              }
-              required
-            />
-          </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="play_time">경기 시간</label>
-            <input
-              type="text"
-              id="play_time"
-              name="play_time"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.play_time : ""}
-              placeholder="ex) 2시간"
-              required
-            />
-          </p>
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="positions">모집 포지션</label>
-            <p className="flex flex-wrap gap-2">
+          <InputField
+            id="kick_off"
+            label="킥오프"
+            type="datetime-local"
+            defaultValue={teamData ? convertDateFormat(teamData.kick_off) : ""}
+            required
+          />
+          <InputField
+            id="play_time"
+            label="경기 시간"
+            defaultValue={teamData?.play_time}
+            placeholder="ex) 2시간"
+            required
+          />
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">모집 포지션</label>
+            <div className="flex flex-wrap gap-3">
               {POSITION.map((position: string) => (
-                <label key={position} className="flex items-center gap-1">
+                <label key={position} className="inline-flex items-center">
                   <input
                     type="checkbox"
-                    id="positions"
+                    id={`position-${position}`}
                     name="positions"
                     value={position}
                     checked={selectedPositions.includes(position)}
                     onChange={handlePositionChange}
+                    className="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
                   />
-                  {position}
+                  <span className="ml-2 text-sm text-gray-700">{position}</span>
                 </label>
               ))}
-            </p>
+            </div>
           </div>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="people">모집 인원</label>
-            <input
-              type="text"
-              id="people"
-              name="people"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.people : ""}
-              required
-            />
-          </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="cost">비용</label>
-            <input
-              type="text"
-              id="cost"
-              name="cost"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.cost : ""}
-              required
-            />
-          </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="quarter">최소 쿼터</label>
-            <input
-              type="text"
-              id="quarter"
-              name="quarter"
-              className="border rounded-md w-full p-2"
-              defaultValue={teamData ? teamData.quarter : ""}
-              required
-            />
-          </p>
-          <p className="flex flex-col gap-y-1">
-            <label htmlFor="announcement">공지사항</label>
+          <InputField
+            id="people"
+            label="모집 인원"
+            defaultValue={teamData?.people}
+            required
+          />
+          <InputField
+            id="cost"
+            label="비용"
+            defaultValue={teamData?.cost}
+            required
+          />
+          <InputField
+            id="quarter"
+            label="최소 쿼터"
+            defaultValue={teamData?.quarter}
+            required
+          />
+          <div className="space-y-2">
+            <label htmlFor="announcement" className="block text-sm font-medium text-gray-700">
+              공지사항
+            </label>
             <textarea
               id="announcement"
               name="announcement"
               rows={7}
-              className="border rounded-md p-2"
-              defaultValue={teamData ? teamData.announcement : ""}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              defaultValue={teamData?.announcement}
               required
             ></textarea>
-          </p>
+          </div>
         </div>
-        <button className="border rounded-md px-5 py-2 text-white bg-orange-400 mt-5 w-[50rem]">
+        <button className="mt-6 w-full bg-orange-400 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-500 transition duration-300">
           {mode}
         </button>
       </Form>
     </main>
   );
 };
+
+const InputField = ({ id, label, type = "text", ...props }: any) => (
+  <div className="space-y-2">
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    <input
+      type={type}
+      id={id}
+      name={id}
+      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+      {...props}
+    />
+  </div>
+);
+
+const SelectField = ({ id, label, options, ...props }: any) => (
+  <div className="space-y-2">
+    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      {label}
+    </label>
+    <select
+      id={id}
+      name={id}
+      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+      {...props}
+    >
+      {options.map((option: any) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+);
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const method = request.method;

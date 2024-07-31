@@ -8,6 +8,7 @@ type Props = {
 
 const MercenaryCard = ({ team }: Props) => {
   const { user } = useAppSelector((state) => state.user);
+  
   return (
     <>
       <Link
@@ -21,6 +22,9 @@ const MercenaryCard = ({ team }: Props) => {
           </h3>
           <p className="text-md text-gray-700 mb-2">
             포메이션 : {team.formation}
+          </p>
+          <p className="text-md text-gray-700 mb-2">
+            모집 인원 : {team.people}
           </p>
           <p className="text-md text-gray-700">
             모집 포지션 :

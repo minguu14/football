@@ -33,11 +33,32 @@ export const getMercenaryList = async (req, res, next) => {
     });
 
     if (mercenaryLists) {
-      res.json(mercenaryLists);
+      res.status(200).json(mercenaryLists);
     } else {
-      res.status(200).json("신청한 용병이 없습니다.");
+      res.json({ message: "신청한 용병이 없습니다." });
     }
   } catch (err) {
     next(errorHandler(500, "데이터를 가져오는데 실패했습니다."));
   }
+};
+
+export const acceptMember = async (req, res, next) => {
+  const member = req.body;
+  const result = await TeamModel.findOneAndUpdate(
+    { _id: member.mercenary_teamId },
+    {
+      $set: {
+        recruited_people: member,
+      },
+    },
+    { new: true }
+  );
+  console.log(result);
+};
+
+export const rejectMember = async (req, res, next) => {
+  const { id } = req.body;
+  console.log(id);
+  const result = await MercenaryModel.deleteOne({ _id: id });
+  console.log(result);
 };
