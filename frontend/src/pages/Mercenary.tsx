@@ -2,10 +2,36 @@
 import { json, useLoaderData } from "react-router-dom";
 import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
+import { useQuery } from "@tanstack/react-query";
+import { getMercenaries } from "../utils/http";
+import Loading from "../components/UI/Loading";
 
 export const Mercenary = () => {
   const teamData = useLoaderData() as Team[];
+  const { data, isPending, isError, error } = useQuery<Team[]>({
+    queryKey: ["mercenaries"],
+    queryFn: getMercenaries,
+  });
+
+  let content;
+
+  if (isPending) {
+    content = <Loading />;
+  }
+
+  if (isError) {
+  }
   
+  if (data) {
+    content = (
+      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {data.map((team) => (
+          <MercenaryCard team={team} key={team._id} />
+        ))}
+      </main>
+    );
+  }
+
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-[100px]">
       <div className="max-w-7xl mx-auto">
@@ -13,15 +39,17 @@ export const Mercenary = () => {
           팀 목록
         </h1>
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">지역</button>
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">포지션</button>
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">모집중</button>
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
+            지역
+          </button>
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
+            포지션
+          </button>
+          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
+            모집중
+          </button>
         </div>
-        <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {teamData.map((team) => (
-            <MercenaryCard team={team} key={team._id}/>
-          ))}
-        </main>
+        {content}
       </div>
     </div>
   );

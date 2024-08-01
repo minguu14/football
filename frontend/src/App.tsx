@@ -14,6 +14,7 @@ import MercenaryDetail, {
 import { EditMyTeam, loader as editLoader } from "./pages/EditMyTeam";
 import { action as teamAction } from "./components/UI/TeamForm";
 import MercenaryList, { loader as listLoader } from "./pages/MercenaryList";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -49,8 +50,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

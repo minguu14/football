@@ -1,6 +1,11 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
-import { ActionFunctionArgs, Form, FormMethod, redirect } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  FormMethod,
+  redirect,
+} from "react-router-dom";
 import { AddressModal } from "../modal/AddressModal";
 import { convertDateFormat } from "../../utils";
 import { Team } from "../../models";
@@ -55,7 +60,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
         encType="multipart/form-data"
         className="max-w-3xl mx-auto mt-10 shadow-lg rounded-lg p-8"
       >
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">팀 정보 {mode}</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+          팀 정보 {mode}
+        </h2>
         <div className="space-y-6">
           <InputField
             id="name"
@@ -92,7 +99,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">경기 장소</label>
+            <label className="block text-sm font-medium text-gray-700">
+              경기 장소
+            </label>
             <input
               type="text"
               id="place"
@@ -136,7 +145,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">모집 포지션</label>
+            <label className="block text-sm font-medium text-gray-700">
+              모집 포지션
+            </label>
             <div className="flex flex-wrap gap-3">
               {POSITION.map((position: string) => (
                 <label key={position} className="inline-flex items-center">
@@ -173,7 +184,10 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <div className="space-y-2">
-            <label htmlFor="announcement" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="announcement"
+              className="block text-sm font-medium text-gray-700"
+            >
               공지사항
             </label>
             <textarea
@@ -254,7 +268,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       });
 
       if (res.ok) {
-        return redirect("/");
+        return redirect("/mercenary");
       }
     } catch (err) {
       console.error("Error:", err);
@@ -279,7 +293,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       });
 
       if (res.ok) {
-        return redirect("/");
+        return redirect("/mercenary/" + params.teamId);
       }
     } catch (err) {
       console.error("Error:", err);

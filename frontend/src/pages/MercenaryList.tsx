@@ -4,7 +4,6 @@ import { MercenaryLists } from "../models";
 const MercenaryList = () => {
   const lists = useLoaderData() as MercenaryLists[];
   console.log(lists);
-
   const handleAccept = async (id: string) => {
     // 수락 로직 구현
     const [member] = lists.filter((list) => list._id === id);

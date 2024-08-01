@@ -34,7 +34,7 @@ const MercenaryDetail = () => {
       if (!res.ok) {
         console.log("삭제 실패");
       }
-      navigate("/");
+      navigate("/mercenary");
     } catch (err) {
       console.log(err);
     }

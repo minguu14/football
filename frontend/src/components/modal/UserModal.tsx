@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/redux";
 import { logOut } from "../../store/userSlice";
 
@@ -8,7 +8,7 @@ type Props = {
 
 export const UserModal = ({ setIsModal }: Props) => {
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
   async function handleLogout() {
     try {
       const res = await fetch("http://localhost:8080/logout", {
@@ -19,6 +19,7 @@ export const UserModal = ({ setIsModal }: Props) => {
       if (res.ok) {
         dispatch(logOut(null));
         setIsModal(false);
+        navigate('/login');
       }
       console.log(resData);
     } catch (err) {
