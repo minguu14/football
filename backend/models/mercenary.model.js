@@ -8,6 +8,7 @@ const MercenarySchema = new Schema(
     positions: { type: Array, required: true },
     player: { type: String },
     mercenary_teamId: { type: String, required: true },
+    isAccepted: { type: Boolean },
   },
   { timestamps: true }
 );

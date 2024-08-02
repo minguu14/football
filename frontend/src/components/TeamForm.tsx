@@ -1,38 +1,27 @@
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActionFunctionArgs,
   Form,
   FormMethod,
   redirect,
 } from "react-router-dom";
-import { AddressModal } from "../modal/AddressModal";
-import { convertDateFormat } from "../../utils";
-import { Team } from "../../models";
-
-const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
+import { AddressModal } from "./modal/AddressModal";
+import { convertDateFormat } from "../utils";
+import { Team } from "../models";
+import { InputField } from "./UI/Form/InputField";
+import { SelectField } from "./UI/Form/SelectField";
+import PositionField from "./UI/Form/PositionField";
 
 type Props = {
   mode: string;
-  teamData: Team | null;
+  teamData: Team | undefined;
   method: FormMethod | undefined;
 };
 
 export const TeamForm = ({ mode, teamData, method }: Props) => {
-  const [selectedPositions, setSelectedPositions] = useState<string[]>(
-    teamData ? teamData.positions : []
-  );
   const [address, setAddress] = useState({ address: "", title: "" });
   const [addressModal, setAddressModal] = useState<boolean>(false);
-
-  const handlePositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const position = e.target.value;
-    setSelectedPositions((prevPositions: string[]) =>
-      prevPositions.includes(position)
-        ? prevPositions.filter((pos: string) => pos !== position)
-        : [...prevPositions, position]
-    );
-  };
 
   function handleSearch() {
     setAddressModal(true);
@@ -149,20 +138,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
               모집 포지션
             </label>
             <div className="flex flex-wrap gap-3">
-              {POSITION.map((position: string) => (
-                <label key={position} className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`position-${position}`}
-                    name="positions"
-                    value={position}
-                    checked={selectedPositions.includes(position)}
-                    onChange={handlePositionChange}
-                    className="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">{position}</span>
-                </label>
-              ))}
+              <PositionField teamData={teamData} />
             </div>
           </div>
           <InputField
@@ -207,41 +183,6 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
     </main>
   );
 };
-
-const InputField = ({ id, label, type = "text", ...props }: any) => (
-  <div className="space-y-2">
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <input
-      type={type}
-      id={id}
-      name={id}
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-      {...props}
-    />
-  </div>
-);
-
-const SelectField = ({ id, label, options, ...props }: any) => (
-  <div className="space-y-2">
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-      {label}
-    </label>
-    <select
-      id={id}
-      name={id}
-      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-      {...props}
-    >
-      {options.map((option: any) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-);
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const method = request.method;
@@ -292,6 +233,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
       });
 
+      
       if (res.ok) {
         return redirect("/mercenary/" + params.teamId);
       }

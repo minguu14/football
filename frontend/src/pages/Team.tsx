@@ -1,5 +1,5 @@
-import { TeamForm } from "../components/UI/TeamForm";
+import { TeamForm } from "../components/TeamForm";
 
 export const Team = () => {
-  return <TeamForm mode="등록" teamData={null} method="post" />;
+  return <TeamForm mode="등록" teamData={undefined} method="post" />;
 };

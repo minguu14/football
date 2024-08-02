@@ -4,15 +4,17 @@ import errorHandler from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const mercenary = async (req, res, next) => {
-  const { real_name, contact, positions, player, teamId } = req.body;
+  const { real_name, contact, positions, player, teamId, isAccepted } =
+    req.body;
+
   const newMercenary = new MercenaryModel({
     real_name,
     contact,
     positions,
     player,
     mercenary_teamId: teamId,
+    isAccepted,
   });
-
   try {
     await newMercenary.save();
     res.status(200).json("용병 신청이 완료되었습니다.");
@@ -44,7 +46,7 @@ export const getMercenaryList = async (req, res, next) => {
 
 export const acceptMember = async (req, res, next) => {
   const member = req.body;
-  const result = await TeamModel.findOneAndUpdate(
+  const result1 = await TeamModel.findOneAndUpdate(
     { _id: member.mercenary_teamId },
     {
       $set: {
@@ -53,12 +55,23 @@ export const acceptMember = async (req, res, next) => {
     },
     { new: true }
   );
-  console.log(result);
+
+  const result2 = await MercenaryModel.findOneAndUpdate(
+    { _id: member._id },
+    {
+      $set: {
+        isAccepted: true,
+      },
+    },
+    { new: true }
+  );
+
+  res.status(200).json({ success: true });
 };
 
 export const rejectMember = async (req, res, next) => {
   const { id } = req.body;
   console.log(id);
   const result = await MercenaryModel.deleteOne({ _id: id });
-  console.log(result);
+  res.status(200).json("용병 거절");
 };

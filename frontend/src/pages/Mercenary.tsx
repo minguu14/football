@@ -1,27 +1,19 @@
-// Mercenary.tsx
-import { json, useLoaderData } from "react-router-dom";
 import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
 import { useQuery } from "@tanstack/react-query";
-import { getMercenaries } from "../utils/http";
-import Loading from "../components/UI/Loading";
+import { getMercenaries, queryClient } from "../utils/http";
 
 export const Mercenary = () => {
-  const teamData = useLoaderData() as Team[];
-  const { data, isPending, isError, error } = useQuery<Team[]>({
+  const { data, isError, error } = useQuery<Team[]>({
     queryKey: ["mercenaries"],
     queryFn: getMercenaries,
   });
 
   let content;
 
-  if (isPending) {
-    content = <Loading />;
-  }
-
   if (isError) {
   }
-  
+
   if (data) {
     content = (
       <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -56,10 +48,8 @@ export const Mercenary = () => {
 };
 
 export const Loader = async () => {
-  const res = await fetch("http://localhost:8080/getMercenary");
-  if (!res.ok) {
-    return json({ message: "데이터를 가져올 수 없습니다." });
-  } else {
-    return res;
-  }
+  return queryClient.fetchQuery({
+    queryKey: ["mercenaries"],
+    queryFn: getMercenaries,
+  });
 };

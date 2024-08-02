@@ -39,6 +39,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
     const newData = {
       ...data,
       teamId: params.teamId,
+      isAccepted: false,
     };
 
     const res = await fetch("http://localhost:8080/mercenary", {

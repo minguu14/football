@@ -33,4 +33,6 @@ export type MercenaryLists = {
   contact: string;
   positions: string[];
   player: string | null;
+  mercenary_teamId: string;
+  isAccepted: boolean;
 };
