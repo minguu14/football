@@ -33,7 +33,6 @@ export const getMercenaryList = async (req, res, next) => {
     const mercenaryLists = await MercenaryModel.find({
       mercenary_teamId: { $in: ownerTeamIds },
     });
-
     if (mercenaryLists) {
       res.status(200).json(mercenaryLists);
     } else {
@@ -46,17 +45,8 @@ export const getMercenaryList = async (req, res, next) => {
 
 export const acceptMember = async (req, res, next) => {
   const member = req.body;
-  const result1 = await TeamModel.findOneAndUpdate(
-    { _id: member.mercenary_teamId },
-    {
-      $set: {
-        recruited_people: member,
-      },
-    },
-    { new: true }
-  );
 
-  const result2 = await MercenaryModel.findOneAndUpdate(
+  const test = await MercenaryModel.findOneAndUpdate(
     { _id: member._id },
     {
       $set: {
@@ -66,12 +56,49 @@ export const acceptMember = async (req, res, next) => {
     { new: true }
   );
 
+  if (test.isAccepted) {
+    await TeamModel.findOneAndUpdate(
+      { _id: member.mercenary_teamId },
+      {
+        $push: {
+          recruited_member: member._id,
+        },
+      },
+      { new: true }
+    );
+  }
+
   res.status(200).json({ success: true });
 };
 
 export const rejectMember = async (req, res, next) => {
   const { id } = req.body;
-  console.log(id);
-  const result = await MercenaryModel.deleteOne({ _id: id });
+  await MercenaryModel.deleteOne({ _id: id });
   res.status(200).json("용병 거절");
+};
+
+export const cancelMember = async (req, res, next) => {
+  const member = req.body;
+  
+  await MercenaryModel.findOneAndUpdate(
+    { _id: member._id },
+    {
+      $set: {
+        isAccepted: false,
+      },
+    },
+    { new: true }
+  );
+
+  await TeamModel.findOneAndUpdate(
+    { recruited_member: member._id },
+    {
+      $pull: {
+        recruited_member: member._id,
+      },
+    },
+    { new: true }
+  );
+
+  res.status(200).json("취소");
 };

@@ -70,3 +70,13 @@ export async function rejectMember(id: string) {
     },
   });
 }
+
+export async function cancelMember(member: MercenaryLists) {
+  await fetch("http://localhost:8080/cancelmember", {
+    method: "PATCH",
+    body: JSON.stringify(member),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

@@ -10,7 +10,8 @@ export type Team = {
   kick_off: string;
   play_time: string;
   positions: string[];
-  people: string;
+  member: string;
+  recruited_member: MercenaryLists[];
   cost: string;
   quarter: string;
   announcement: string;

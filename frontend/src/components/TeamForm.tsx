@@ -142,9 +142,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             </div>
           </div>
           <InputField
-            id="people"
+            id="member"
             label="모집 인원"
-            defaultValue={teamData?.people}
+            defaultValue={teamData?.member}
             required
           />
           <InputField

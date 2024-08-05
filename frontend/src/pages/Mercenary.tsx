@@ -2,8 +2,11 @@ import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
 import { useQuery } from "@tanstack/react-query";
 import { getMercenaries, queryClient } from "../utils/http";
+import { FaMapMarkerAlt, FaUserFriends, FaSearch } from 'react-icons/fa';
+import { useState } from 'react';
 
 export const Mercenary = () => {
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const { data, isError, error } = useQuery<Team[]>({
     queryKey: ["mercenaries"],
     queryFn: getMercenaries,
@@ -12,6 +15,12 @@ export const Mercenary = () => {
   let content;
 
   if (isError) {
+    content = (
+      <div className="text-center text-red-600 py-10">
+        <p className="text-2xl font-bold">오류가 발생했습니다.</p>
+        <p className="mt-2">잠시 후 다시 시도해 주세요.</p>
+      </div>
+    );
   }
 
   if (data) {
@@ -24,6 +33,12 @@ export const Mercenary = () => {
     );
   }
 
+  const filterButtons = [
+    { label: '지역', icon: FaMapMarkerAlt },
+    { label: '포지션', icon: FaUserFriends },
+    { label: '모집중', icon: FaSearch },
+  ];
+
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-[100px]">
       <div className="max-w-7xl mx-auto">
@@ -31,15 +46,18 @@ export const Mercenary = () => {
           팀 목록
         </h1>
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
-            지역
-          </button>
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
-            포지션
-          </button>
-          <button className="bg-orange-400 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-orange-500 transition duration-300 ease-in-out transform hover:-translate-y-1">
-            모집중
-          </button>
+          {filterButtons.map((button) => (
+            <button
+              key={button.label}
+              className={`flex items-center space-x-2 bg-white text-orange-500 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-orange-500 hover:text-white transition duration-300 ease-in-out transform hover:-translate-y-1 ${
+                activeFilter === button.label ? 'bg-orange-500 text-white' : ''
+              }`}
+              onClick={() => setActiveFilter(button.label)}
+            >
+              <button.icon />
+              <span>{button.label}</span>
+            </button>
+          ))}
         </div>
         {content}
       </div>
