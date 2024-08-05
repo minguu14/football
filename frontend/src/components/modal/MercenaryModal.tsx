@@ -46,6 +46,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(newData),
+      credentials: "include",
     });
 
     if (res.ok) {

@@ -1,13 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type Props = {
-  onClose: any;
+  onClose: () => void;
   setAddress: React.Dispatch<
-    React.SetStateAction<{
-      address: string;
-      title: string;
-    }>
+    SetStateAction<{ address: string; title: string }>
   >;
 };
 
@@ -69,42 +66,55 @@ export const AddressModal = ({ onClose, setAddress }: Props) => {
 
   return createPortal(
     <dialog
-      className="rounded-md h-[500px] w-[800px] backdrop:bg-black/50"
+      className="rounded-lg shadow-xl h-[500px] w-[800px] backdrop:bg-black/50 p-6"
       ref={dialog}
       onClose={onClose}
     >
-      <div className="flex flex-col gap-y-4 justify-center items-center w-full h-full">
-        <div className="flex">
+      <div className="flex flex-col gap-y-6 h-full">
+        <h2 className="text-2xl font-bold text-gray-800">경기 장소 검색</h2>
+        <div className="flex gap-x-2">
           <input
             type="text"
             onChange={(e) => handleChange(e)}
             placeholder="경기 장소를 입력해주세요"
-            className="border rounded-md w-full p-2"
+            className="border border-gray-300 rounded-md w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
-            className="border rounded-md w-[80px]"
+            className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-300"
             onClick={() => handleSearch(searchAddress)}
           >
             검색
           </button>
         </div>
-        {addressItems.map((item: any, index: any) => (
-          <div className="w-[500px] cursor-pointer hover:underline" key={index}>
-            {!errorMessage && (
-              <div onClick={() => handleSelectAddress(item)}>
-                <p>{item.title.replace(/<[^>]*>/g, "")}</p>
-                <p>{item.address}</p>
-              </div>
-            )}
-          </div>
-        ))}
-        {errorMessage && <p>{errorMessage}</p>}
-        <button
-          onClick={handleBtn}
-          className="border rounded-md w-[80px] h-[30px] bg-orange-400 text-white"
-        >
-          확인
-        </button>
+        <div className="flex-grow overflow-y-auto">
+          {addressItems.map((item: any, index: any) => (
+            <div
+              className="mb-4 p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer transition duration-300"
+              key={index}
+              onClick={() => handleSelectAddress(item)}
+            >
+              {!errorMessage && (
+                <div>
+                  <p className="font-semibold text-gray-800">
+                    {item.title.replace(/<[^>]*>/g, "")}
+                  </p>
+                  <p className="text-gray-600 text-sm mt-1">{item.address}</p>
+                </div>
+              )}
+            </div>
+          ))}
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleBtn}
+            className="bg-orange-400 text-white rounded-md px-6 py-2 hover:bg-orange-500 transition duration-300"
+          >
+            확인
+          </button>
+        </div>
       </div>
     </dialog>,
     modalRoot

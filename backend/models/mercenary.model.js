@@ -9,6 +9,12 @@ const MercenarySchema = new Schema(
     player: { type: String },
     mercenary_teamId: { type: String, required: true },
     isAccepted: { type: Boolean, default: false },
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );

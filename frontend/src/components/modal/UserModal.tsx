@@ -9,6 +9,7 @@ type Props = {
 export const UserModal = ({ setIsModal }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   async function handleLogout() {
     try {
       const res = await fetch("http://localhost:8080/logout", {
@@ -28,25 +29,43 @@ export const UserModal = ({ setIsModal }: Props) => {
   }
 
   return (
-    <div className="absolute border rounded-md w-48 top-10 right-[-75px]">
-      <ul className="flex flex-col bg-white text-center">
-        <Link to={"/user"} onClick={() => setIsModal(false)}>
-          <li className="border-b p-3">유저정보</li>
-        </Link>
-        <Link to={"/mercenarylist"} onClick={() => setIsModal(false)}>
-          <li className="border-b p-3 flex justify-center items-center gap-x-1">
+    <div className="absolute w-64 top-5 left-[-6rem] mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+      <ul className="divide-y divide-gray-200">
+        <li>
+          <Link
+            to="/user"
+            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
+            onClick={() => setIsModal(false)}
+          >
+            유저정보
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/mercenarylist"
+            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
+            onClick={() => setIsModal(false)}
+          >
             <span>용병 리스트</span>
-          </li>
-        </Link>
-        <Link to={"/mercenarylist"} onClick={() => setIsModal(false)}>
-          <li className="border-b p-3 flex justify-center items-center gap-x-1">
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/recruitlist"
+            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
+            onClick={() => setIsModal(false)}
+          >
             <span>모집 리스트</span>
-          </li>
-        </Link>
-
-        <button onClick={handleLogout}>
-          <li className="p-3">로그아웃</li>
-        </button>
+          </Link>
+        </li>
+        <li>
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition duration-150 ease-in-out"
+          >
+            로그아웃
+          </button>
+        </li>
       </ul>
     </div>
   );
