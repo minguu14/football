@@ -5,7 +5,7 @@ import {
   getTeamDetail,
   patchTeam,
   deleteMercenary,
-} from "../controllers/team.controller.js";
+} from "../controllers/mercenaryRecruitment.controller.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 

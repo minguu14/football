@@ -2,7 +2,8 @@ import UserInput from "../components/UI/UserInput";
 import UserSelect from "../components/UI/UserSelect";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/UI/InputError";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
+import { register as registerApi } from "../utils/http";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -35,19 +36,16 @@ export const Register = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await fetch("http://localhost:8080/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const resData = await res.json();
-      console.log(resData);
+      const resData = await registerApi(data);
       if (resData.success) {
-        navigate("");
+        console.log(resData.message);
+        navigate("/");
+      } else {
+        return console.log(resData.message);
       }
-    } catch (err) {}
+    } catch (err) {
+      return json("서버 에러!");
+    }
   };
 
   return (

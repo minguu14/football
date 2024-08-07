@@ -12,7 +12,7 @@ export const UserModal = ({ setIsModal }: Props) => {
 
   async function handleLogout() {
     try {
-      const res = await fetch("http://localhost:8080/logout", {
+      const res = await fetch("api/auth/logout", {
         method: "POST",
         credentials: "include",
       });

@@ -7,7 +7,7 @@ import {
   redirect,
 } from "react-router-dom";
 import { AddressModal } from "./modal/AddressModal";
-import { convertDateFormat } from "../utils";
+import { convertDateFormat } from "../utils/format";
 import { Team } from "../models";
 import { InputField } from "./UI/Form/InputField";
 import { SelectField } from "./UI/Form/SelectField";
@@ -19,7 +19,7 @@ type Props = {
   method: FormMethod | undefined;
 };
 
-export const TeamForm = ({ mode, teamData, method }: Props) => {
+export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
   const [address, setAddress] = useState({ address: "", title: "" });
   const [addressModal, setAddressModal] = useState<boolean>(false);
 
@@ -30,7 +30,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
   useEffect(() => {
     if (teamData) {
       setAddress({
-        title: teamData.place,
+        title: teamData.field,
         address: teamData.address,
       });
     }
@@ -54,9 +54,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
         </h2>
         <div className="space-y-6">
           <InputField
-            id="name"
+            id="teamName"
             label="팀 이름"
-            defaultValue={teamData?.name}
+            defaultValue={teamData?.teamName}
             required
           />
           <InputField
@@ -67,14 +67,14 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
           />
           <div className="flex gap-4">
             <SelectField
-              id="skill"
+              id="skillLevel"
               label="팀 실력"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
-              defaultValue={teamData?.skill}
+              defaultValue={teamData?.skillLevel}
               className="w-full border rounded-md p-1"
             />
             <SelectField
-              id="manner"
+              id="manners"
               label="팀 매너"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
               defaultValue={teamData?.manner}
@@ -82,9 +82,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             />
           </div>
           <InputField
-            id="age"
+            id="ageGroup"
             label="팀 연령대"
-            defaultValue={teamData?.age}
+            defaultValue={teamData?.ageGroup}
             required
           />
           <div className="space-y-2">
@@ -93,8 +93,8 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             </label>
             <input
               type="text"
-              id="place"
-              name="place"
+              id="field"
+              name="field"
               className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
               defaultValue={address.title.replace(/<[^>]*>/g, "")}
               required
@@ -120,16 +120,16 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             </div>
           </div>
           <InputField
-            id="kick_off"
+            id="matchStartTime"
             label="킥오프"
             type="datetime-local"
-            defaultValue={teamData ? convertDateFormat(teamData.kick_off) : ""}
+            defaultValue={teamData ? convertDateFormat(teamData.matchStartTime) : ""}
             required
           />
           <InputField
-            id="play_time"
+            id="totalMatchTime"
             label="경기 시간"
-            defaultValue={teamData?.play_time}
+            defaultValue={teamData?.totalMatchTime}
             placeholder="ex) 2시간"
             required
           />
@@ -142,9 +142,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             </div>
           </div>
           <InputField
-            id="member"
+            id="recruitingNumber"
             label="모집 인원"
-            defaultValue={teamData?.member}
+            defaultValue={teamData?.recruitingNumber}
             required
           />
           <InputField
@@ -154,24 +154,24 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <InputField
-            id="quarter"
+            id="minimumQuarter"
             label="최소 쿼터"
-            defaultValue={teamData?.quarter}
+            defaultValue={teamData?.minimumQuarter}
             required
           />
           <div className="space-y-2">
             <label
-              htmlFor="announcement"
+              htmlFor="comment"
               className="block text-sm font-medium text-gray-700"
             >
-              공지사항
+              코멘트
             </label>
             <textarea
-              id="announcement"
-              name="announcement"
+              id="comment"
+              name="comment"
               rows={7}
               className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
-              defaultValue={teamData?.announcement}
+              defaultValue={teamData?.comment}
               required
             ></textarea>
           </div>
@@ -190,7 +190,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const teamData = Object.fromEntries(data.entries());
   const date = dayjs(teamData.kick_off as string);
   const formatDate = date.format("YY년 MM월 DD일 HH시 mm분");
-  let fetchUrl = "http://localhost:8080/createteam";
+  let fetchUrl = "api/mercenaryRecruitment/createteam";
 
   if (method === "POST") {
     const newTeam = {
@@ -217,7 +217,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   if (method === "PATCH") {
-    fetchUrl = "http://localhost:8080/patchTeam/" + params.teamId;
+    fetchUrl = "api/mercenaryRecruitment/patchTeam/" + params.teamId;
 
     const updateTeam = {
       ...teamData,

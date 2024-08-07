@@ -60,7 +60,7 @@ const Header = () => {
             </Link>
             <div className="hidden md:flex space-x-6">
               <Link
-                to={user ? "team" : "login"}
+                to={user ? "mercenaryrecruitment" : "login"}
                 className={
                   location.pathname === "/" ? homeLinkClasses : linkClasses
                 }

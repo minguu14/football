@@ -1,8 +1,27 @@
 import { QueryClient } from "@tanstack/react-query";
 import { json, redirect } from "react-router-dom";
 import { MercenaryLists } from "../models";
+import { FieldValues } from "react-hook-form";
 
 export const queryClient = new QueryClient();
+
+export async function register(data: FieldValues) {
+  try {
+    const res = await fetch("api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    
+    const resData = await res.json();
+    return resData;
+
+  } catch (err) {
+    return json("오류가 발생했습니다.");
+  }
+}
 
 export async function getMercenaries() {
   const res = await fetch("http://localhost:8080/getMercenary");

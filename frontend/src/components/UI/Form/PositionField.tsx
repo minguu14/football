@@ -9,7 +9,7 @@ type Props = {
 
 const PositionField = ({ teamData }: Props) => {
   const [selectedPositions, setSelectedPositions] = useState<string[]>(
-    teamData ? teamData.positions : []
+    teamData ? teamData.recruitingPositions : []
   );
 
   const handlePositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ const PositionField = ({ teamData }: Props) => {
           <input
             type="checkbox"
             id={`position-${position}`}
-            name="positions"
+            name="recruitingPositions"
             value={position}
             checked={selectedPositions.includes(position)}
             onChange={handlePositionChange}

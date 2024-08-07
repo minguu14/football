@@ -1,41 +1,43 @@
-import TeamModel from "../models/team.model.js";
+import TeamModel from "../models/mercenaryRecruitment.model.js";
 import errorHandler from "../utils/error.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 
 export const createTeam = async (req, res, next) => {
   verifyToken(req, res, async () => {
     const {
-      age,
-      announcement,
-      place,
-      address,
-      cost,
-      kick_off,
-      play_time,
-      quarter,
-      member,
-      manner,
-      name,
-      skill,
-      positions,
+      teamName,
       formation,
+      skillLevel,
+      manners,
+      ageGroup,
+      field,
+      address,
+      matchStartTime,
+      totalMatchTime,
+      recruitingPositions,
+      recruitingNumber,
+      recruitedMembers,
+      cost,
+      minimumQuarter,
+      comment,
     } = req.body;
 
     const newTeam = new TeamModel({
-      name,
+      teamName,
       formation,
-      skill,
-      manner,
-      age,
-      place,
+      skillLevel,
+      manners,
+      ageGroup,
+      field,
       address,
-      kick_off,
-      play_time,
-      positions,
-      member,
+      matchStartTime,
+      totalMatchTime,
+      recruitingPositions,
+      recruitingNumber,
+      recruitedMembers,
       cost,
-      quarter,
-      announcement,
+      minimumQuarter,
+      comment,
       owner: req.user._id,
     });
     console.log(newTeam);

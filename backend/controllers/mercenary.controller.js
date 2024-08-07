@@ -1,5 +1,5 @@
 import MercenaryModel from "../models/mercenary.model.js";
-import TeamModel from "../models/team.model.js";
+import TeamModel from "../models/mercenaryRecruitment.model.js";
 import errorHandler from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/authMiddleware.js";

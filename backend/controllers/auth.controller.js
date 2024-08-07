@@ -4,52 +4,67 @@ import errorHandler from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
-  const { email, password, confirm_password, gender, name, birthday } =
-    req.body;
-  if (
-    !email ||
-    !password ||
-    !gender ||
-    !name ||
-    !birthday ||
-    email === "" ||
-    password === "" ||
-    gender === "" ||
-    name === "" ||
-    birthday === ""
-  ) {
-    return next(errorHandler(400, "입력값이 비어있습니다."));
-  }
-
-  if (password !== confirm_password) {
-    return next(errorHandler(400, "비밀번호가 다릅니다."));
-  }
-
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new UserModel({
-    email,
-    password: hashedPassword,
-    gender,
-    name,
-    birthday,
-  });
-
   try {
+    const { email, password, confirm_password, gender, name, birthday } =
+      req.body;
+    if (
+      !email ||
+      !password ||
+      !gender ||
+      !name ||
+      !birthday ||
+      email === "" ||
+      password === "" ||
+      gender === "" ||
+      name === "" ||
+      birthday === ""
+    ) {
+      return next(
+        errorHandler(400, { success: false, message: "입력값이 비었습니다." })
+      );
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (user && email === user.email) {
+      return next(
+        errorHandler(400, {
+          success: false,
+          message: "이메일이 중복되었습니다.",
+        })
+      );
+    }
+
+    if (password !== confirm_password) {
+      return next(
+        errorHandler(400, { success: false, message: "비밀번호가 다릅니다." })
+      );
+    }
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new UserModel({
+      email,
+      password: hashedPassword,
+      gender,
+      name,
+      birthday,
+    });
+
     await newUser.save();
-    res.json({ success: true, message: "회원가입 완료!!" });
+
+    res.status(201).json({ success: true, message: "회원가입 완료!!" });
   } catch (err) {
     return next(err);
   }
 };
 
 export const login = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (!email || !password || email === "" || password === "") {
-    return next(errorHandler(400, "입력값이 비어있습니다."));
-  }
-
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password || email === "" || password === "") {
+      return next(errorHandler(400, "입력값이 비어있습니다."));
+    }
+
     const validUser = await UserModel.findOne({ email });
     if (!validUser) {
       return next(errorHandler(400, "이메일 또는 비밀번호가 다릅니다."));
@@ -67,26 +82,18 @@ export const login = async (req, res, next) => {
         ...validUser._doc,
         password: undefined,
       },
-      process.env.ACCESS_SECRET,
-      // { expiresIn: "1h" }
+      process.env.ACCESS_SECRET
     );
 
-    // const refreshToken = jwt.sign(
-    //   {
-    //     ...validUser._doc,
-    //     password: undefined,
-    //   },
-    //   process.env.REFRESH_SECRET,
-    //   { expiresIn: "1h" }
-    // );
-
-    res.cookie("accessToken", accessToken, { httpOnly: true });
-    // res.cookie("refreshToken", refreshToken, { httpOnly: true });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "strict",
+    });
 
     const userInfo = jwt.verify(accessToken, process.env.ACCESS_SECRET);
     res.status(200).json(userInfo);
   } catch (err) {
-    return next(errorHandler(500, err));
+    return next(err);
   }
 };
 
@@ -95,6 +102,6 @@ export const logOut = (req, res, next) => {
     res.cookie("accessToken", "");
     res.status(200).json("로그아웃 성공!");
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 };
