@@ -102,13 +102,17 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               <Link
                 to="/login"
-                className={`${homeLinkClasses} px-4 py-2 rounded-full`}
+                className={`${
+                  location.pathname === "/" ? homeLinkClasses : linkClasses
+                } px-4 py-2 rounded-full`}
               >
                 로그인
               </Link>
               <Link
                 to="/register"
-                className={`${homeLinkClasses} px-4 py-2 rounded-full`}
+                className={`${
+                  location.pathname === "/" ? homeLinkClasses : linkClasses
+                } px-4 py-2 rounded-full`}
               >
                 회원가입
               </Link>

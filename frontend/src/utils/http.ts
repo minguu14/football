@@ -38,6 +38,22 @@ export async function deleteMercenary(id: string) {
   redirect("/mercenary");
 }
 
+export async function getMyMercenaries(teamId: string) {
+  const res = await fetch("http://localhost:8080/mercenaries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ teamId }),
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    console.log("신청한 용병 내역을 가져오는데 실패했습니다.");
+  }
+
+  const resData = await res.json();
+  return resData;
+}
+
 export async function getMercenaryLists() {
   const res = await fetch("http://localhost:8080/mercenarylist", {
     credentials: "include",

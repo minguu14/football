@@ -64,7 +64,6 @@ export const patchTeam = async (req, res, next) => {
       { new: true }
     );
 
-    console.log(result);
     if (!result) {
       return res.status(404).json({ message: "Team not found" });
     }
@@ -80,7 +79,6 @@ export const patchTeam = async (req, res, next) => {
 
 export const deleteMercenary = async (req, res, next) => {
   const teamId = req.params.id;
-  console.log(teamId);
   await TeamModel.deleteOne({ _id: teamId });
   res.status(200).json("모집 삭제");
 };
@@ -92,7 +90,6 @@ export const getMercenary = async (req, res, next) => {
 
 export const getTeamDetail = async (req, res, next) => {
   const teamId = req.params.id;
-  console.log(teamId);
   const selectedTeam = await TeamModel.findById(teamId);
   res.status(200).json(selectedTeam);
 };

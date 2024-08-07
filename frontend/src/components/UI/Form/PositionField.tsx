@@ -31,7 +31,7 @@ const PositionField = ({ teamData }: Props) => {
             value={position}
             checked={selectedPositions.includes(position)}
             onChange={handlePositionChange}
-            className="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
+            className="rounded border text-orange-600 focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50"
           />
           <span className="ml-2 text-sm text-gray-700">{position}</span>
         </label>

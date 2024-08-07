@@ -8,7 +8,7 @@ export const mercenary = async (req, res, next) => {
   verifyToken(req, res, async () => {
     const { real_name, contact, positions, player, teamId, isAccepted } =
       req.body;
-      
+
     const newMercenary = new MercenaryModel({
       real_name,
       contact,
@@ -28,6 +28,38 @@ export const mercenary = async (req, res, next) => {
     }
   });
 };
+
+export const getMercenaries = async (req, res, next) => {
+  const { teamId } = req.body;
+
+  try {
+    const mercenaries = await MercenaryModel.find({
+      mercenary_teamId: teamId,
+    });
+    if (mercenaries) {
+      res.status(200).json(mercenaries);
+    } else {
+      res.json("신청현 용병 내역이 없습니다.");
+    }
+  } catch (err) {
+    next(500, "데이터를 가져오는데 실패했습니다.");
+  }
+};
+
+// export const getMercenaries = async (req, res, next) => {
+//   const { id } = req.body;
+
+//   try {
+//     const mercenaries = await MercenaryModel.find({ user_id: id });
+//     if (mercenaries) {
+//       res.status(200).json(mercenaries);
+//     } else {
+//       res.json("신청현 용병 내역이 없습니다.");
+//     }
+//   } catch (err) {
+//     next(500, "데이터를 가져오는데 실패했습니다.");
+//   }
+// };
 
 export const getMercenaryList = async (req, res, next) => {
   try {
@@ -66,7 +98,7 @@ export const acceptMember = async (req, res, next) => {
       { _id: member.mercenary_teamId },
       {
         $push: {
-          recruited_member: member._id,
+          recruited_member: member.user_id,
         },
       },
       { new: true }
@@ -96,10 +128,10 @@ export const cancelMember = async (req, res, next) => {
   );
 
   await TeamModel.findOneAndUpdate(
-    { recruited_member: member._id },
+    { recruited_member: member.user_id },
     {
       $pull: {
-        recruited_member: member._id,
+        recruited_member: member.user_id,
       },
     },
     { new: true }

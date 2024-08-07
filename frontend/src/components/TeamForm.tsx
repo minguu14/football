@@ -37,7 +37,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
   }, []);
 
   return (
-    <main className="min-h-screen py-10">
+    <main className="min-h-screen bg-gray-50 py-10">
       {addressModal && (
         <AddressModal
           onClose={() => setAddressModal(false)}
@@ -47,9 +47,9 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
       <Form
         method={method}
         encType="multipart/form-data"
-        className="max-w-3xl mx-auto mt-10 shadow-lg rounded-lg p-8"
+        className="max-w-3xl mx-auto mt-10 rounded-lg p-8 bg-white border border-gray-200"
       >
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 pb-4 border-b border-gray-200">
           팀 정보 {mode}
         </h2>
         <div className="space-y-6">
@@ -71,14 +71,14 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
               label="팀 실력"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
               defaultValue={teamData?.skill}
-              className="w-full"
+              className="w-full border rounded-md p-1"
             />
             <SelectField
               id="manner"
               label="팀 매너"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
               defaultValue={teamData?.manner}
-              className="w-full"
+              className="w-full border rounded-md p-1"
             />
           </div>
           <InputField
@@ -95,7 +95,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
               type="text"
               id="place"
               name="place"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
               defaultValue={address.title.replace(/<[^>]*>/g, "")}
               required
               readOnly
@@ -105,7 +105,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
                 type="text"
                 id="address"
                 name="address"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+                className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
                 defaultValue={address.address}
                 required
                 readOnly
@@ -170,7 +170,7 @@ export const TeamForm = ({ mode, teamData, method }: Props) => {
               id="announcement"
               name="announcement"
               rows={7}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+              className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
               defaultValue={teamData?.announcement}
               required
             ></textarea>

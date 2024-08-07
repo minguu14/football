@@ -121,7 +121,7 @@ const MercenaryList = () => {
                 className="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
               >
                 <FaEye className="mr-2" />
-                <span className="font-semibold">신청한 공고 보기</span>
+                <span className="font-semibold">신청한 모집 보기</span>
               </Link>
             </div>
             <div className="bg-gray-100 p-4 flex justify-end gap-x-3">

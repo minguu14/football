@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../hooks/redux";
 
 type Props = {
   onClose: any;
@@ -8,6 +9,7 @@ type Props = {
 const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
 export const MercenaryModal = ({ onClose }: Props) => {
   const params = useParams();
+  const { user } = useAppSelector((state) => state.user);
   const dialog = useRef<HTMLDialogElement>(null);
   const modalRoot = document.getElementById("modal");
 
@@ -39,6 +41,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
     const newData = {
       ...data,
       teamId: params.teamId,
+      userId: user._id,
       isAccepted: false,
     };
 

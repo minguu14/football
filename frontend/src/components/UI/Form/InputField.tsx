@@ -7,7 +7,7 @@ export const InputField = ({ id, label, type = "text", ...props }: any) => (
         type={type}
         id={id}
         name={id}
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
+        className="mt-1 block w-full rounded-md border p-2 focus:border-orange-500 focus:ring-orange-500"
         {...props}
       />
     </div>
