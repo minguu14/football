@@ -1,15 +1,13 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomePage } from "./pages/Home";
-import { MercenaryRecruitment } from "./pages/MercenaryRecruitment";
-import { Mercenary, Loader as mercenaryLoader } from "./pages/Mercenary";
+import { CreateMercenary } from "./pages/CreateMercenary";
+import { Mercenary, loader as mercenaryLoader } from "./pages/Mercenary";
+import { MercenaryDetail, loader as mercenaryDetailLoader } from "./pages/MercenaryDetail";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import RootLayout from "./pages/Root";
 import Error from "./pages/Error";
-import MercenaryDetail, {
-  loader as mercenaryDetailLoader,
-} from "./pages/MercenaryDetail";
-import { EditMyTeam, loader as editLoader } from "./pages/EditMyTeam";
+import { EditMercenary, loader as editLoader } from "./pages/EditMercenary";
 import { action as MercenaryRecruitmentAction } from "./components/MercenaryRecruitmentForm";
 import MercenaryList, { loader as listLoader } from "./pages/MercenaryList";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -22,17 +20,25 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "mercenaryrecruitment", element: <MercenaryRecruitment />, action: MercenaryRecruitmentAction },
-
-      { path: "mercenary", element: <Mercenary />, loader: mercenaryLoader },
       {
-        path: "mercenary/:teamId",
+        path: "recruitment",
+        element: <CreateMercenary />,
+        action: MercenaryRecruitmentAction,
+      },
+
+      {
+        path: "recruitments",
+        element: <Mercenary />,
+        loader: mercenaryLoader,
+      },
+      {
+        path: "recruitments/:teamId",
         element: <MercenaryDetail />,
         loader: mercenaryDetailLoader,
       },
       {
-        path: "mercenary/:teamId/edit",
-        element: <EditMyTeam />,
+        path: "recruitments/:teamId/edit",
+        element: <EditMercenary />,
         action: MercenaryRecruitmentAction,
         loader: editLoader,
       },

@@ -12,19 +12,19 @@ const MercenaryCard = ({ team }: Props) => {
   
   return (
     <Link
-      to={user ? team._id : "/login"}
+      to={user ? `/recruitments/${team._id}` : "/login"}
       className="block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
     >
       <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4">
         <p className="text-sm text-white flex items-center">
           <FaCalendarAlt className="mr-2" />
-          {team.kick_off}
+          {team.matchStartTime}
         </p>
       </div>
       <div className="p-6">
         <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
           <FaMapMarkerAlt className="mr-2 text-orange-500" />
-          {team.place}
+          {team.field}
         </h3>
         <div className="space-y-3">
           <p className="text-md text-gray-700 flex items-center">
@@ -35,12 +35,12 @@ const MercenaryCard = ({ team }: Props) => {
           <p className="text-md text-gray-700 flex items-center">
             <FaUsers className="mr-2 text-gray-500" />
             <span className="font-semibold">모집 인원:</span>
-            <span className="ml-2">{team.member}</span>
+            <span className="ml-2">{team.recruitingNumber}</span>
           </p>
           <div className="text-md text-gray-700">
             <p className="font-semibold mb-2">모집 포지션:</p>
             <div className="flex flex-wrap gap-2">
-              {team.positions.map((position, index) => (
+              {team.recruitingPositions.map((position, index) => (
                 <span key={index} className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-sm">
                   {position}
                 </span>

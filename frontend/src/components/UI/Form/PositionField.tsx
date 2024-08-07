@@ -26,7 +26,7 @@ const PositionField = ({ teamData }: Props) => {
         <label key={position} className="inline-flex items-center">
           <input
             type="checkbox"
-            id={`position-${position}`}
+            id={`recruitingPositions-${position}`}
             name="recruitingPositions"
             value={position}
             checked={selectedPositions.includes(position)}

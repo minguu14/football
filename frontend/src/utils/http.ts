@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { json, redirect } from "react-router-dom";
+import { json } from "react-router-dom";
 import { MercenaryLists } from "../models";
 import { FieldValues } from "react-hook-form";
 
@@ -7,24 +7,23 @@ export const queryClient = new QueryClient();
 
 export async function register(data: FieldValues) {
   try {
-    const res = await fetch("api/auth/register", {
+    const res = await fetch("http://localhost:8080/api/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    
+
     const resData = await res.json();
     return resData;
-
   } catch (err) {
     return json("오류가 발생했습니다.");
   }
 }
 
-export async function getMercenaries() {
-  const res = await fetch("http://localhost:8080/getMercenary");
+export async function getAllMercenaryRecruitments() {
+  const res = await fetch("http://localhost:8080/api/mercenary/recruitments");
   if (!res.ok) {
     return json({ message: "데이터를 가져올 수 없습니다." });
   }
@@ -33,8 +32,8 @@ export async function getMercenaries() {
   return resData;
 }
 
-export async function getMercenaryDetail(id: string) {
-  const res = await fetch("http://localhost:8080/getMercenaryDetail/" + id);
+export async function getMercenaryRecruitmentDetail(id: string) {
+  const res = await fetch("http://localhost:8080/api/mercenary/recruitment/" + id);
   if (!res.ok) {
     return json({ message: "데이터를 가져올 수 없습니다." });
   }
@@ -43,18 +42,12 @@ export async function getMercenaryDetail(id: string) {
   return resData;
 }
 
-export async function deleteMercenary(id: string) {
-  const res = await fetch("http://localhost:8080/deleteMercenary/" + id, {
+export async function deleteMercenaryRecruitment(id: string) {
+  await fetch("http://localhost:8080/api/mercenary/recruitment/" + id, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
   });
-
-  if (!res.ok) {
-    console.log("삭제 실패");
-  }
-
-  redirect("/mercenary");
 }
 
 export async function getMyMercenaries(teamId: string) {
@@ -74,7 +67,7 @@ export async function getMyMercenaries(teamId: string) {
 }
 
 export async function getMercenaryLists() {
-  const res = await fetch("http://localhost:8080/mercenarylist", {
+  const res = await fetch("http://localhost:8080/api/list/mercenarylist", {
     credentials: "include",
   });
 

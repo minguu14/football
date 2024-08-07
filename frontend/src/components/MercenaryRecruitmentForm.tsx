@@ -77,7 +77,7 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
               id="manners"
               label="팀 매너"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
-              defaultValue={teamData?.manner}
+              defaultValue={teamData?.manners}
               className="w-full border rounded-md p-1"
             />
           </div>
@@ -192,13 +192,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const teamData = Object.fromEntries(data.entries());
   const date = dayjs(teamData.kick_off as string);
   const formatDate = date.format("YY년 MM월 DD일 HH시 mm분");
-  let fetchUrl = "api/mercenaryRecruitment/createteam";
+  let fetchUrl = "http://localhost:8080/api/mercenary/recruitment";
 
   if (method === "POST") {
     const newTeam = {
       ...teamData,
-      kick_off: formatDate,
-      positions: data.getAll("positions"),
+      matchStartTime: formatDate,
+      recruitingPositions: data.getAll("recruitingPositions"),
     };
     try {
       const res = await fetch(fetchUrl, {
@@ -213,25 +213,24 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       const resData = await res.json();
 
       if (resData.success) {
-        //return redirect("/mercenary");
         console.log(resData.message);
-        return redirect("/");
+        return redirect("/recruitments");
       } else {
         console.log(resData.message);
       }
-
     } catch (err) {
       console.error(err);
     }
   }
 
   if (method === "PATCH") {
-    fetchUrl = "api/mercenaryRecruitment/patchTeam/" + params.teamId;
+    fetchUrl =
+      "http://localhost:8080/api/mercenary/recruitment/" + params.teamId;
 
     const updateTeam = {
       ...teamData,
-      kick_off: formatDate,
-      positions: data.getAll("positions"),
+      matchStartTime: formatDate,
+      recruitingPositions: data.getAll("recruitingPositions"),
     };
     try {
       const res = await fetch(fetchUrl, {
@@ -243,8 +242,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       });
 
       if (res.ok) {
-        //return redirect("/mercenary/" + params.teamId);
-        return redirect("/");
+        return redirect(`/recruitments/${params.teamId}`);
       }
     } catch (err) {
       console.error("Error:", err);

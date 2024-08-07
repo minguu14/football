@@ -1,16 +1,18 @@
 import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
 import { useQuery } from "@tanstack/react-query";
-import { getMercenaries, queryClient } from "../utils/http";
-import { FaMapMarkerAlt, FaUserFriends, FaSearch } from 'react-icons/fa';
-import { useState } from 'react';
+import { getAllMercenaryRecruitments, queryClient } from "../utils/http";
+import { FaMapMarkerAlt, FaUserFriends, FaSearch } from "react-icons/fa";
+import { useState } from "react";
 
 export const Mercenary = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const { data, isError, error } = useQuery<Team[]>({
-    queryKey: ["mercenaries"],
-    queryFn: getMercenaries,
+    queryKey: ["recruitments"],
+    queryFn: getAllMercenaryRecruitments,
+    staleTime: 10000,
   });
+  console.log(data);
 
   let content;
 
@@ -23,7 +25,17 @@ export const Mercenary = () => {
     );
   }
 
-  if (data) {
+  if (data && data.length <= 0) {
+    content = (
+      <main className="flex items-center justify-center">
+        <p className="text-orange-500 text-xl font-semibold">
+          등록된 팀이 없습니다.
+        </p>
+      </main>
+    );
+  }
+
+  if (data && data.length > 0) {
     content = (
       <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {data.map((team) => (
@@ -34,9 +46,9 @@ export const Mercenary = () => {
   }
 
   const filterButtons = [
-    { label: '지역', icon: FaMapMarkerAlt },
-    { label: '포지션', icon: FaUserFriends },
-    { label: '모집중', icon: FaSearch },
+    { label: "지역", icon: FaMapMarkerAlt },
+    { label: "포지션", icon: FaUserFriends },
+    { label: "모집중", icon: FaSearch },
   ];
 
   return (
@@ -50,7 +62,7 @@ export const Mercenary = () => {
             <button
               key={button.label}
               className={`flex items-center space-x-2 bg-white text-orange-500 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-orange-500 hover:text-white transition duration-300 ease-in-out transform hover:-translate-y-1 ${
-                activeFilter === button.label ? 'bg-orange-500 text-white' : ''
+                activeFilter === button.label ? "bg-orange-500 text-white" : ""
               }`}
               onClick={() => setActiveFilter(button.label)}
             >
@@ -65,9 +77,9 @@ export const Mercenary = () => {
   );
 };
 
-export const Loader = async () => {
+export const loader = async () => {
   return queryClient.fetchQuery({
-    queryKey: ["mercenaries"],
-    queryFn: getMercenaries,
+    queryKey: ["recruitments"],
+    queryFn: getAllMercenaryRecruitments,
   });
 };

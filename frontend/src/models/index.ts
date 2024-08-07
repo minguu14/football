@@ -3,7 +3,7 @@ export type Team = {
   teamName: string;
   formation: string;
   skillLevel: string;
-  manner: string;
+  manners: string;
   ageGroup: string;
   field: string;
   address: string;

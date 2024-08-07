@@ -37,8 +37,8 @@ app.listen(port, () => {
 });
 
 app.use("/api/auth/", authRouter);
-app.use("/api/mercenaryRecruitment/", mercenaryRecruitment);
-app.use("/", mercenaryRouter);
+app.use("/api/mercenary/", mercenaryRecruitment);
+app.use("/api/list/", mercenaryRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

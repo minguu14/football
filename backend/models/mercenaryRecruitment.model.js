@@ -14,7 +14,12 @@ const MercenaryRecruitmentSchema = new Schema(
     totalMatchTime: { type: String, required: true },
     recruitingPositions: { type: Array, required: true },
     recruitingNumber: { type: String, required: true },
-    recruitedMembers: { type: Array },
+    recruitedMembers: [
+      {
+        member: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        isAccepted: { type: Boolean },
+      },
+    ],
     cost: { type: String, required: true },
     minimumQuarter: { type: String, required: true },
     comment: { type: String, required: true },

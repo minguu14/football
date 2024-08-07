@@ -1,17 +1,17 @@
 import express from "express";
 import {
-  createTeam,
-  getMercenary,
-  getTeamDetail,
-  patchTeam,
-  deleteMercenary,
+  createRecruitment,
+  updateRecruitment,
+  getAllRecruitment,
+  getRecruitmentDetail,
+  deleteRecruitment,
 } from "../controllers/mercenaryRecruitment.controller.js";
 const router = express.Router();
 
-router.post("/createteam", createTeam);
-router.patch("/patchTeam/:id", patchTeam);
-router.get("/getMercenary", getMercenary);
-router.get("/getMercenaryDetail/:id", getTeamDetail);
-router.delete("/deleteMercenary/:id", deleteMercenary);
+router.post("/recruitment", createRecruitment); 
+router.patch("/recruitment/:id", updateRecruitment);
+router.get("/recruitments", getAllRecruitment);
+router.get("/recruitment/:id", getRecruitmentDetail);
+router.delete("/recruitment/:id", deleteRecruitment);
 
 export default router;

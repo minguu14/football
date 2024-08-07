@@ -173,7 +173,7 @@ const MercenaryList = () => {
 
 export default MercenaryList;
 
-export const loader = async () => {
+export const loader = () => {
   return queryClient.fetchQuery({
     queryKey: ["mercenaryLists"],
     queryFn: getMercenaryLists,

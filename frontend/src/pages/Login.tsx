@@ -22,7 +22,7 @@ export const Login = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       dispatch(loginStart());
-      const res = await fetch("api/auth/login", {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

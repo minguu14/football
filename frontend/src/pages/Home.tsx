@@ -17,7 +17,7 @@ export const HomePage = () => {
           <p className="text-4xl text-white">용병을 모집해보자!</p>
           <p className="text-3xl text-white">즐축 합시다</p>
           <Link
-            to={user ? "/team" : "/login"}
+            to={user ? "recruitment" : "/login"}
             className="inline-block bg-orange-500 text-white text-xl font-semibold px-8 py-4 rounded-full hover:bg-orange-600 transition duration-300"
           >
             시작하기
@@ -55,7 +55,7 @@ export const HomePage = () => {
                 description="실력에 맞는 용병을 빠르게 찾아보세요"
               />
               <Link
-                to={user ? "/team" : "/login"}
+                to={user ? "recruitment" : "/login"}
                 className="inline-block bg-orange-500 text-white text-lg font-semibold px-8 py-3 rounded-full hover:bg-orange-600 transition duration-300"
               >
                 모집 등록
@@ -95,7 +95,7 @@ export const HomePage = () => {
                 description="새로운 팀과 함께 축구를 즐기세요"
               />
               <Link
-                to="/mercenary"
+                to="/recruitments"
                 className="inline-block bg-orange-500 text-white text-lg font-semibold px-8 py-3 rounded-full hover:bg-orange-600 transition duration-300"
               >
                 살펴 보기

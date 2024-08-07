@@ -45,7 +45,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
       isAccepted: false,
     };
 
-    const res = await fetch("http://localhost:8080/mercenary", {
+    const res = await fetch("http://localhost:8080/api/list/mercenary", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(newData),

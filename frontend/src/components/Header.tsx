@@ -60,7 +60,7 @@ const Header = () => {
             </Link>
             <div className="hidden md:flex space-x-6">
               <Link
-                to={user ? "mercenaryrecruitment" : "login"}
+                to={user ? "recruitment" : "login"}
                 className={
                   location.pathname === "/" ? homeLinkClasses : linkClasses
                 }
@@ -68,7 +68,7 @@ const Header = () => {
                 모집 등록
               </Link>
               <Link
-                to="mercenary"
+                to="recruitments"
                 className={
                   location.pathname === "/" ? homeLinkClasses : linkClasses
                 }
@@ -101,7 +101,7 @@ const Header = () => {
           ) : (
             <div className="hidden md:flex items-center space-x-4">
               <Link
-                to="/login"
+                to="login"
                 className={`${
                   location.pathname === "/" ? homeLinkClasses : linkClasses
                 } px-4 py-2 rounded-full`}
@@ -109,7 +109,7 @@ const Header = () => {
                 로그인
               </Link>
               <Link
-                to="/register"
+                to="register"
                 className={`${
                   location.pathname === "/" ? homeLinkClasses : linkClasses
                 } px-4 py-2 rounded-full`}
@@ -149,13 +149,13 @@ const Header = () => {
           </button>
           <div className="flex flex-col space-y-4">
             <Link
-              to={user ? "team" : "login"}
+              to={user ? "recruitment" : "login"}
               className="text-gray-800 hover:text-orange-500"
             >
               모집 등록
             </Link>
             <Link
-              to="mercenary"
+              to="recruitments"
               className="text-gray-800 hover:text-orange-500"
             >
               용병 모집
@@ -163,19 +163,19 @@ const Header = () => {
             {user ? (
               <>
                 <Link
-                  to="/user"
+                  to="user"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   유저정보
                 </Link>
                 <Link
-                  to="/mercenarylist"
+                  to="mercenarylist"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   용병 리스트
                 </Link>
                 <Link
-                  to="/recruitlist"
+                  to="mercenarylist"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   모집 리스트
@@ -192,13 +192,13 @@ const Header = () => {
             ) : (
               <>
                 <Link
-                  to="/login"
+                  to="login"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   로그인
                 </Link>
                 <Link
-                  to="/register"
+                  to="register"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   회원가입
