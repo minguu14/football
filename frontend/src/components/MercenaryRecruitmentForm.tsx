@@ -123,7 +123,9 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
             id="matchStartTime"
             label="킥오프"
             type="datetime-local"
-            defaultValue={teamData ? convertDateFormat(teamData.matchStartTime) : ""}
+            defaultValue={
+              teamData ? convertDateFormat(teamData.matchStartTime) : ""
+            }
             required
           />
           <InputField
@@ -208,11 +210,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         credentials: "include",
       });
 
-      if (res.ok) {
-        return redirect("/mercenary");
+      const resData = await res.json();
+
+      if (resData.success) {
+        //return redirect("/mercenary");
+        console.log(resData.message);
+        return redirect("/");
+      } else {
+        console.log(resData.message);
       }
+
     } catch (err) {
-      console.error("Error:", err);
+      console.error(err);
     }
   }
 
@@ -233,9 +242,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
       });
 
-      
       if (res.ok) {
-        return redirect("/mercenary/" + params.teamId);
+        //return redirect("/mercenary/" + params.teamId);
+        return redirect("/");
       }
     } catch (err) {
       console.error("Error:", err);

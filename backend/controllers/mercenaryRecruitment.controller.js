@@ -1,9 +1,10 @@
 import TeamModel from "../models/mercenaryRecruitment.model.js";
 import errorHandler from "../utils/error.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import MercenaryRecruitmentModel from "../models/mercenaryRecruitment.model.js";
+import jwt from "jsonwebtoken";
 
 export const createTeam = async (req, res, next) => {
-  verifyToken(req, res, async () => {
+  try {
     const {
       teamName,
       formation,
@@ -22,7 +23,10 @@ export const createTeam = async (req, res, next) => {
       comment,
     } = req.body;
 
-    const newTeam = new TeamModel({
+    const token = req.cookies.accessToken;
+    const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    const newTeam = new MercenaryRecruitmentModel({
       teamName,
       formation,
       skillLevel,
@@ -38,20 +42,18 @@ export const createTeam = async (req, res, next) => {
       cost,
       minimumQuarter,
       comment,
-      owner: req.user._id,
+      owner: userInfo._id,
     });
-    console.log(newTeam);
-    try {
-      await newTeam.save();
-      res.json({
-        success: true,
-        message: "팀이 등록되었습니다!",
-      });
-    } catch (err) {
-      console.log(err);
-      return next(errorHandler(400, "팀 등록에 실패했습니다."));
-    }
-  });
+
+    await newTeam.save();
+
+    res.status(201).json({
+      success: true,
+      message: "팀이 등록되었습니다!",
+    });
+  } catch (err) {
+    return next(errorHandler(err));
+  }
 };
 
 export const patchTeam = async (req, res, next) => {

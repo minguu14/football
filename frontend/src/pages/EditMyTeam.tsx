@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
-import { TeamForm } from "../components/TeamForm";
+import { MercenaryRecruitmentForm } from "../components/MercenaryRecruitmentForm";
 import { Team } from "../models";
 import { getMercenaryDetail, queryClient } from "../utils/http";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,9 @@ export const EditMyTeam = () => {
     queryKey: ["mercenary", params.teamId],
     queryFn: () => getMercenaryDetail(params.teamId as string),
   });
-  return <TeamForm mode="수정" teamData={data} method="patch" />;
+  return (
+    <MercenaryRecruitmentForm mode="수정" teamData={data} method="patch" />
+  );
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
