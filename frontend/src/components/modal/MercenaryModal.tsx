@@ -1,27 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks/redux";
+import PositionField from "../UI/Form/PositionField";
+import { TextareaField } from "../UI/Form/TextareaField";
 
 type Props = {
   onClose: any;
 };
-const POSITION = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "RB", "GK"];
+
 export const MercenaryModal = ({ onClose }: Props) => {
   const params = useParams();
   const { user } = useAppSelector((state) => state.user);
   const dialog = useRef<HTMLDialogElement>(null);
   const modalRoot = document.getElementById("modal");
-
-  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
-  const handlePositionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const position = e.target.value;
-    setSelectedPositions((prevPositions: string[]) =>
-      prevPositions.includes(position)
-        ? prevPositions.filter((pos: string) => pos !== position)
-        : [...prevPositions, position]
-    );
-  };
 
   function handleCancel() {
     if (dialog.current) {
@@ -33,7 +25,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
   async function handleApplication(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const fd = new FormData(event.target as HTMLFormElement);
-    const positions = fd.getAll("positions");
+    const positions = fd.getAll("recruitingPositions");
     const data: Record<string, FormDataEntryValue | FormDataEntryValue[]> =
       Object.fromEntries(fd.entries());
     data.positions = positions;
@@ -79,27 +71,13 @@ export const MercenaryModal = ({ onClose }: Props) => {
       <form onSubmit={handleApplication}>
         <h2 className="text-2xl font-bold mb-4">용병 신청</h2>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
-            실명
-          </label>
-          <input
-            type="text"
-            id="real_name"
-            name="real_name"
-            className="border rounded-md w-full p-2"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="contact" className="block text-sm font-medium mb-1">
-            연락처
-          </label>
-          <input
-            type="text"
-            id="contact"
-            name="contact"
-            className="border rounded-md w-full p-2"
-            required
+          <TextareaField
+            id="comment"
+            name="comment"
+            rows={5}
+            defaultValue={undefined}
+            label="코멘트"
+            required={false}
           />
         </div>
         <div className="mb-4">
@@ -107,19 +85,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
             선호 포지션
           </label>
           <div className="flex flex-wrap gap-2">
-            {POSITION.map((position: string) => (
-              <label key={position} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  id="positions"
-                  name="positions"
-                  value={position}
-                  checked={selectedPositions.includes(position)}
-                  onChange={handlePositionChange}
-                />
-                {position}
-              </label>
-            ))}
+            <PositionField teamData={undefined} />
           </div>
         </div>
         <div className="mb-4">

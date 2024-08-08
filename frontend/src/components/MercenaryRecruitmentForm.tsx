@@ -12,6 +12,7 @@ import { Team } from "../models";
 import { InputField } from "./UI/Form/InputField";
 import { SelectField } from "./UI/Form/SelectField";
 import PositionField from "./UI/Form/PositionField";
+import { TextareaField } from "./UI/Form/TextareaField";
 
 type Props = {
   mode: string;
@@ -71,14 +72,12 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
               label="팀 실력"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
               defaultValue={teamData?.skillLevel}
-              className="w-full border rounded-md p-1"
             />
             <SelectField
               id="manners"
               label="팀 매너"
               options={["하하하", "하하", "하", "상상상", "상상", "상"]}
               defaultValue={teamData?.manners}
-              className="w-full border rounded-md p-1"
             />
           </div>
           <InputField
@@ -88,24 +87,16 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              경기 장소
-            </label>
-            <input
-              type="text"
+            <InputField
               id="field"
-              name="field"
-              className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
+              label="경기 장소"
               defaultValue={address.title.replace(/<[^>]*>/g, "")}
               required
               readOnly
             />
-            <div className="flex mt-2">
-              <input
-                type="text"
+            <div className="flex space-y-2">
+              <InputField
                 id="address"
-                name="address"
-                className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
                 defaultValue={address.address}
                 required
                 readOnly
@@ -113,7 +104,7 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
               <button
                 type="button"
                 onClick={handleSearch}
-                className="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-400 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                className="ml-2 w-16 px-4 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-orange-400 hover:bg-orange-500"
               >
                 검색
               </button>
@@ -162,20 +153,14 @@ export const MercenaryRecruitmentForm = ({ mode, teamData, method }: Props) => {
             required
           />
           <div className="space-y-2">
-            <label
-              htmlFor="comment"
-              className="block text-sm font-medium text-gray-700"
-            >
-              코멘트
-            </label>
-            <textarea
+            <TextareaField
               id="comment"
               name="comment"
               rows={7}
-              className="mt-1 block w-full rounded-md border focus:border-orange-500 focus:ring-orange-500 p-2"
+              label="코멘트"
               defaultValue={teamData?.comment}
               required
-            ></textarea>
+            />
           </div>
         </div>
         <button className="mt-6 w-full bg-orange-400 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-500 transition duration-300">

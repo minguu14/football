@@ -5,19 +5,32 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   try {
-    const { email, password, confirm_password, gender, name, birthday } =
-      req.body;
+    const {
+      email,
+      password,
+      confirm_password,
+      gender,
+      birthday,
+      real_name,
+      nickname,
+      phone_number,
+    } = req.body;
+
     if (
       !email ||
       !password ||
       !gender ||
-      !name ||
       !birthday ||
+      !real_name ||
+      !nickname ||
+      !phone_number ||
       email === "" ||
       password === "" ||
       gender === "" ||
-      name === "" ||
-      birthday === ""
+      birthday === "" ||
+      real_name === "" ||
+      nickname === "" ||
+      phone_number === ""
     ) {
       return next(
         errorHandler(400, { success: false, message: "입력값이 비었습니다." })
@@ -45,8 +58,10 @@ export const register = async (req, res, next) => {
       email,
       password: hashedPassword,
       gender,
-      name,
       birthday,
+      real_name,
+      nickname,
+      phone_number,
     });
 
     await newUser.save();

@@ -77,10 +77,10 @@ export const AddressModal = ({ onClose, setAddress }: Props) => {
             type="text"
             onChange={(e) => handleChange(e)}
             placeholder="경기 장소를 입력해주세요"
-            className="border border-gray-300 rounded-md w-full p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md w-full px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
-            className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-300"
+            className="bg-blue-500 w-16 text-white rounded-md px-4 py-1 hover:bg-blue-600 transition duration-300"
             onClick={() => handleSearch(searchAddress)}
           >
             검색
