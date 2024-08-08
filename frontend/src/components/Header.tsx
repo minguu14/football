@@ -94,7 +94,7 @@ const Header = () => {
                     location.pathname === "/" ? homeIconClasses : iconClasses
                   }`}
                 >
-                  {user.name}
+                  {user.nickname}
                 </span>
               </button>
             </div>

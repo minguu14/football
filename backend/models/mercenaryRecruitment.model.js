@@ -16,8 +16,8 @@ const MercenaryRecruitmentSchema = new Schema(
     recruitingNumber: { type: String, required: true },
     recruitedMembers: [
       {
-        member: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        isAccepted: { type: Boolean },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mercenary",
       },
     ],
     cost: { type: String, required: true },

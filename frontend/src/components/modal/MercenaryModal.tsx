@@ -1,19 +1,37 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "../../hooks/redux";
 import PositionField from "../UI/Form/PositionField";
 import { TextareaField } from "../UI/Form/TextareaField";
+import { mercenaryApplication, queryClient } from "../../utils/http";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   onClose: any;
 };
 
-export const MercenaryModal = ({ onClose }: Props) => {
+export const MercenaryModal: React.FC<Props> = ({ onClose }) => {
   const params = useParams();
-  const { user } = useAppSelector((state) => state.user);
   const dialog = useRef<HTMLDialogElement>(null);
   const modalRoot = document.getElementById("modal");
+
+  const {
+    mutate,
+    isPending: isPendingApplication,
+    isError: isErrorApplication,
+    error: applicationError,
+  } = useMutation({
+    mutationFn: mercenaryApplication,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["recruitments", params.teamId],
+        refetchType: "none",
+      });
+
+      dialog.current?.close();
+      onClose();
+    },
+  });
 
   function handleCancel() {
     if (dialog.current) {
@@ -30,26 +48,7 @@ export const MercenaryModal = ({ onClose }: Props) => {
       Object.fromEntries(fd.entries());
     data.positions = positions;
 
-    const newData = {
-      ...data,
-      teamId: params.teamId,
-      userId: user._id,
-      isAccepted: false,
-    };
-
-    const res = await fetch("http://localhost:8080/api/list/mercenary", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(newData),
-      credentials: "include",
-    });
-
-    if (res.ok) {
-      if (dialog.current) {
-        dialog.current.close();
-      }
-      onClose();
-    }
+    mutate({ data, params });
   }
 
   useEffect(() => {

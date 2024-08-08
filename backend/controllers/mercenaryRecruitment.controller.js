@@ -76,7 +76,7 @@ export const updateRecruitment = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "팀 정보가 수정되었습니다.",
-      team: result,
+      team: teamData,
     });
   } catch (err) {
     next(errorHandler(err));

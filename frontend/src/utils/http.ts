@@ -33,7 +33,9 @@ export async function getAllMercenaryRecruitments() {
 }
 
 export async function getMercenaryRecruitmentDetail(id: string) {
-  const res = await fetch("http://localhost:8080/api/mercenary/recruitment/" + id);
+  const res = await fetch(
+    "http://localhost:8080/api/mercenary/recruitment/" + id
+  );
   if (!res.ok) {
     return json({ message: "데이터를 가져올 수 없습니다." });
   }
@@ -48,6 +50,29 @@ export async function deleteMercenaryRecruitment(id: string) {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
   });
+}
+
+export async function mercenaryApplication({ data, params }: any) {
+  try {
+    const res = await fetch(
+      "http://localhost:8080/api/list/mercenary/" + params.teamId,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include",
+      }
+    );
+
+    if (!res) {
+      console.log("용병 신청을 실패했습니다.");
+    }
+
+    const resData = await res.json();
+    return resData;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export async function getMyMercenaries(teamId: string) {

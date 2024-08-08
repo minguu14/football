@@ -1,32 +1,75 @@
 import MercenaryModel from "../models/mercenary.model.js";
-import TeamModel from "../models/mercenaryRecruitment.model.js";
+import MercenaryRecruitmentModel from "../models/mercenaryRecruitment.model.js";
 import errorHandler from "../utils/error.js";
 import jwt from "jsonwebtoken";
-import { verifyToken } from "../middleware/authMiddleware.js";
 
 export const mercenary = async (req, res, next) => {
-  verifyToken(req, res, async () => {
-    const { real_name, contact, positions, player, teamId, isAccepted } =
-      req.body;
+  try {
+    const { comment, positions, player } = req.body;
+    const { id } = req.params;
+    const token = req.cookies.accessToken;
+    const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
 
     const newMercenary = new MercenaryModel({
-      real_name,
-      contact,
+      real_name: userInfo.real_name,
+      contact: userInfo.phone_number,
       positions,
       player,
-      mercenary_teamId: teamId,
-      isAccepted,
-      user_id: req.user._id,
+      comment,
+      isAccepted: false,
+      mercenary_teamId: id,
+      user_id: userInfo._id,
     });
 
-    try {
-      await newMercenary.save();
-      res.status(200).json("용병 신청이 완료되었습니다.");
-    } catch (err) {
-      console.log(err);
-      return next(errorHandler(400, "용병 신청이 실패했습니다."));
+    if (!newMercenary) {
+      res.status(400).json({
+        application_status: false,
+        message: "용병 신청이 실패했습니다.",
+      });
     }
+
+    await newMercenary.save();
+
+    res.status(201).json({
+      application_status: true,
+      message: "용병 신청이 완료되었습니다.",
+    });
+  } catch (err) {
+    return next(errorHandler(err));
+  }
+};
+
+export const applicationCheck = async (req, res, next) => {
+  const { id } = req.params;
+  const token = req.cookies.accessToken;
+  const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
+
+  const myMercenary = await MercenaryModel.findOne({
+    mercenary_teamId: id,
+    user_id: userInfo._id,
   });
+
+  if (myMercenary) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(200).json({ success: false });
+  }
+};
+
+export const cancelApplication = async (req, res, next) => {
+  const { id } = req.params;
+  const token = req.cookies.accessToken;
+  const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
+
+  const myMercenary = await MercenaryModel.findOne({
+    mercenary_teamId: id,
+    user_id: userInfo._id,
+  });
+
+  if (myMercenary) {
+    await MercenaryModel.deleteOne({ _id: myMercenary._id });
+    res.status(200).json({ success: false });
+  }
 };
 
 export const getMercenaries = async (req, res, next) => {
@@ -45,21 +88,6 @@ export const getMercenaries = async (req, res, next) => {
     next(500, "데이터를 가져오는데 실패했습니다.");
   }
 };
-
-// export const getMercenaries = async (req, res, next) => {
-//   const { id } = req.body;
-
-//   try {
-//     const mercenaries = await MercenaryModel.find({ user_id: id });
-//     if (mercenaries) {
-//       res.status(200).json(mercenaries);
-//     } else {
-//       res.json("신청현 용병 내역이 없습니다.");
-//     }
-//   } catch (err) {
-//     next(500, "데이터를 가져오는데 실패했습니다.");
-//   }
-// };
 
 export const getMercenaryList = async (req, res, next) => {
   try {

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import NaverMap from "../components/NaverMap";
 import { useAppSelector } from "../hooks/redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MercenaryModal } from "../components/modal/MercenaryModal";
 import { MercenaryLists, Team } from "../models";
 import {
@@ -27,6 +27,7 @@ import { InfoCard } from "../components/UI/MercenaryDetail/InfoCard";
 
 export const MercenaryDetail = () => {
   const [mercenaryModal, setMercenaryModal] = useState<boolean>(false);
+  const [applicationStatus, setApplicationStatus] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.user);
   const params = useParams();
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export const MercenaryDetail = () => {
     queryKey: ["recruitments", params.teamId],
     queryFn: () => getMercenaryRecruitmentDetail(params.teamId as string),
   });
-  
+
   const {
     mutate,
     isPending: isPendingDeletion,
@@ -59,6 +60,29 @@ export const MercenaryDetail = () => {
   function deleteRecruitment() {
     mutate(params.teamId as string);
   }
+
+  async function handleCancel() {
+    const res = await fetch(
+      "http://localhost:8080/api/list/cancel" + params.teamId,
+      {
+        credentials: "include",
+      }
+    );
+    const resData = await res.json();
+    setApplicationStatus(resData.success);
+  }
+
+  useEffect(() => {
+    async function test() {
+      const res = await fetch(
+        "http://localhost:8080/api/list/check/" + params.teamId,
+        { credentials: "include" }
+      );
+      const resData = await res.json();
+      setApplicationStatus(resData.success);
+    }
+    test();
+  }, [params.teamId, mercenaryModal]);
 
   let content;
 
@@ -151,12 +175,24 @@ export const MercenaryDetail = () => {
             </Link>
 
             {user && user._id && user._id !== mercenaryDetailData.owner && (
-              <button
-                onClick={() => setMercenaryModal(true)}
-                className="flex items-center bg-orange-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-orange-600 transition-all duration-300 transform hover:scale-105"
-              >
-                <FaUserPlus className="mr-2" /> 용병 신청
-              </button>
+              <>
+                {!applicationStatus && (
+                  <button
+                    onClick={() => setMercenaryModal(true)}
+                    className="flex items-center bg-orange-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-orange-600 transition-all duration-300 transform hover:scale-105"
+                  >
+                    <FaUserPlus className="mr-2" /> 용병 신청
+                  </button>
+                )}
+                {applicationStatus && (
+                  <button
+                    onClick={handleCancel}
+                    className="flex items-center bg-red-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-orange-600 transition-all duration-300 transform hover:scale-105"
+                  >
+                    <FaUndo className="mr-2" /> 신청 취소
+                  </button>
+                )}
+              </>
             )}
             {user && user._id && user._id === mercenaryDetailData.owner && (
               <div className="flex gap-4">

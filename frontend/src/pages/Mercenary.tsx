@@ -12,7 +12,6 @@ export const Mercenary = () => {
     queryFn: getAllMercenaryRecruitments,
     staleTime: 10000,
   });
-  console.log(data);
 
   let content;
 

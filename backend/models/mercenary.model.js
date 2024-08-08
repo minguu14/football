@@ -7,8 +7,13 @@ const MercenarySchema = new Schema(
     contact: { type: String, required: true },
     positions: { type: Array, required: true },
     player: { type: String },
-    mercenary_teamId: { type: String, required: true },
-    isAccepted: { type: Boolean, default: false },
+    comment: { type: String },
+    isAccepted: { type: Boolean },
+    mercenary_teamId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MercenaryRecruitment",
+      required: true,
+    },
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

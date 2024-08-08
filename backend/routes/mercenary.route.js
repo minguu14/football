@@ -6,10 +6,14 @@ import {
   acceptMember,
   rejectMember,
   cancelMember,
+  applicationCheck,
+  cancelApplication,
 } from "../controllers/mercenary.controller.js";
 const router = express.Router();
 
-router.post("/mercenary", mercenary);
+router.post("/mercenary/:id", mercenary);
+router.get("/check/:id", applicationCheck);
+router.get("/cancel:id", cancelApplication);
 router.get("/mercenarylist", getMercenaryList);
 router.post("/mercenaries", getMercenaries);
 router.patch("/acceptmember", acceptMember);
