@@ -12,6 +12,7 @@ import { action as MercenaryRecruitmentAction } from "./components/MercenaryRecr
 import MercenaryList, { loader as listLoader } from "./pages/MercenaryList";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/http";
+import { MyRecruitmentList, loader as myRecruimentLoader } from "./pages/MyRecruitmentList";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "mercenarylist", element: <MercenaryList />, loader: listLoader },
+      { path: "myrecruimentlist", element: <MyRecruitmentList />, loader: myRecruimentLoader },
     ],
   },
 ]);

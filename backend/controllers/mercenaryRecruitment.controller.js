@@ -86,7 +86,6 @@ export const updateRecruitment = async (req, res, next) => {
 export const deleteRecruitment = async (req, res, next) => {
   try {
     const teamId = req.params.id;
-    console.log(teamId);
     await MercenaryRecruitmentModel.deleteOne({ _id: teamId });
     res
       .status(200)
@@ -106,7 +105,24 @@ export const getAllRecruitment = async (req, res, next) => {
     }
     res.status(200).json(teams.reverse());
   } catch (err) {
-    next(errorHandler(err));
+    return next(errorHandler(err));
+  }
+};
+
+export const getMyRecruitment = async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+    const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    const myRecruitment = await MercenaryRecruitmentModel.find({owner: userInfo._id});
+    
+    if(myRecruitment){
+      res.status(200).json(myRecruitment);
+    }else{
+      res.status(204).json({success: false, message: "모집 내역이 없습니다."});
+    }
+  } catch (err) {
+    return next(errorHandler(err));
   }
 };
 

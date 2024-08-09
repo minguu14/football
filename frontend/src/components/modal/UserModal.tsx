@@ -51,7 +51,7 @@ export const UserModal = ({ setIsModal }: Props) => {
         </li>
         <li>
           <Link
-            to="/recruitlist"
+            to="/myrecruimentlist"
             className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition duration-150 ease-in-out"
             onClick={() => setIsModal(false)}
           >

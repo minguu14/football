@@ -32,6 +32,19 @@ export async function getAllMercenaryRecruitments() {
   return resData;
 }
 
+export async function getMyRecruitment() {
+  const res = await fetch(
+    "http://localhost:8080/api/mercenary/myrecruitments",
+    { credentials: "include" }
+  );
+  if (!res.ok) {
+    return json({ message: "데이터를 가져올 수 없습니다." });
+  }
+
+  const resData = await res.json();
+  return resData;
+}
+
 export async function getMercenaryRecruitmentDetail(id: string) {
   const res = await fetch(
     "http://localhost:8080/api/mercenary/recruitment/" + id

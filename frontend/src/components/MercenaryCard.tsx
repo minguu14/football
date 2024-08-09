@@ -13,7 +13,7 @@ const MercenaryCard = ({ team }: Props) => {
   return (
     <Link
       to={user ? `/recruitments/${team._id}` : "/login"}
-      className="block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+      className="block bg-white rounded-2xl overflow-hidden border border-gray-100 transition-all duration-300 transform hover:-translate-y-1"
     >
       <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4">
         <p className="text-sm text-white flex items-center">

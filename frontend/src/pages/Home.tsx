@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import teamImg from "../../images/team.jpg";
+import playImg from "../../images/play.jpg";
 import { useAppSelector } from "../hooks/redux";
 import { FaFutbol, FaUsers, FaSearch } from "react-icons/fa";
 
@@ -12,10 +13,10 @@ export const HomePage = () => {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center space-y-8">
           <h1 className="text-6xl font-bold text-white leading-tight">
-            <span className="text-orange-500">축구</span> 용병을 찾아보자!
+            <span className="text-orange-500">축구</span> 용병을 모집하자!
           </h1>
-          <p className="text-4xl text-white">용병을 모집해보자!</p>
-          <p className="text-3xl text-white">즐축 합시다</p>
+          <p className="text-4xl text-white">용병팀을 찾아보자!</p>
+          <p className="text-3xl text-white">즐축 합시다!</p>
           <Link
             to={user ? "recruitment" : "/login"}
             className="inline-block bg-orange-500 text-white text-xl font-semibold px-8 py-4 rounded-full hover:bg-orange-600 transition duration-300"
@@ -69,12 +70,12 @@ export const HomePage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              <span className="text-orange-500">용병</span> 찾기
+              <span className="text-orange-500">팀</span> 찾기
             </h2>
           </div>
           <div className="flex flex-col md:flex-row-reverse items-center justify-between gap-12">
             <img
-              src={teamImg}
+              src={playImg}
               alt="teamImg"
               className="w-full md:w-1/2 rounded-lg shadow-xl"
             />

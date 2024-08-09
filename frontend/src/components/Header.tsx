@@ -99,7 +99,7 @@ const Header = () => {
               </button>
             </div>
           ) : (
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-2">
               <Link
                 to="login"
                 className={`${
@@ -175,7 +175,7 @@ const Header = () => {
                   용병 리스트
                 </Link>
                 <Link
-                  to="mercenarylist"
+                  to="myrecruimentlist"
                   className="text-gray-800 hover:text-orange-500"
                 >
                   모집 리스트

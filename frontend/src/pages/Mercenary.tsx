@@ -45,6 +45,7 @@ export const Mercenary = () => {
   }
 
   const filterButtons = [
+    { label: "전체" },
     { label: "지역", icon: FaMapMarkerAlt },
     { label: "포지션", icon: FaUserFriends },
     { label: "모집중", icon: FaSearch },
@@ -54,18 +55,18 @@ export const Mercenary = () => {
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-[100px]">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-5xl font-extrabold text-gray-900 mb-10 text-center">
-          팀 목록
+          팀 리스트
         </h1>
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {filterButtons.map((button) => (
             <button
               key={button.label}
-              className={`flex items-center space-x-2 bg-white text-orange-500 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-orange-500 hover:text-white transition duration-300 ease-in-out transform hover:-translate-y-1 ${
+              className={`flex items-center space-x-2 text-orange-500 font-semibold py-2 px-6 rounded-full border border-gray-100 hover:bg-orange-500 hover:text-white transition duration-300 ease-in-out transform hover:-translate-y-1 ${
                 activeFilter === button.label ? "bg-orange-500 text-white" : ""
               }`}
               onClick={() => setActiveFilter(button.label)}
             >
-              <button.icon />
+              {button.icon ? <button.icon /> : undefined}
               <span>{button.label}</span>
             </button>
           ))}
