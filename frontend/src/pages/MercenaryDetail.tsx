@@ -73,7 +73,7 @@ export const MercenaryDetail = () => {
   }
 
   useEffect(() => {
-    async function test() {
+    async function checkApplication() {
       const res = await fetch(
         "http://localhost:8080/api/list/check/" + params.teamId,
         { credentials: "include" }
@@ -81,7 +81,7 @@ export const MercenaryDetail = () => {
       const resData = await res.json();
       setApplicationStatus(resData.success);
     }
-    test();
+    checkApplication();
   }, [params.teamId, mercenaryModal]);
 
   let content;

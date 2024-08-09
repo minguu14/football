@@ -68,6 +68,15 @@ export const cancelApplication = async (req, res, next) => {
 
   if (myMercenary) {
     await MercenaryModel.deleteOne({ _id: myMercenary._id });
+    await MercenaryRecruitmentModel.findOneAndUpdate(
+      { recruitedMembers: myMercenary._id },
+      {
+        $pull: {
+          recruitedMembers: myMercenary._id,
+        },
+      },
+      { new: true }
+    );
     res.status(200).json({ success: false });
   }
 };
@@ -82,7 +91,7 @@ export const getMercenaries = async (req, res, next) => {
     if (mercenaries) {
       res.status(200).json(mercenaries);
     } else {
-      res.json("신청현 용병 내역이 없습니다.");
+      res.json("신청한 용병 내역이 없습니다.");
     }
   } catch (err) {
     next(500, "데이터를 가져오는데 실패했습니다.");
@@ -92,14 +101,17 @@ export const getMercenaries = async (req, res, next) => {
 export const getMercenaryList = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
-    const owner = jwt.verify(token, process.env.ACCESS_SECRET);
-    const ownerTeam = await TeamModel.find({ owner: owner._id });
+    const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
+    const ownerTeam = await MercenaryRecruitmentModel.find({
+      owner: userInfo._id,
+    });
     const ownerTeamIds = ownerTeam.map((team) => team._id);
     const mercenaryLists = await MercenaryModel.find({
       mercenary_teamId: { $in: ownerTeamIds },
     });
+
     if (mercenaryLists) {
-      res.status(200).json(mercenaryLists);
+      res.status(200).json(mercenaryLists.reverse());
     } else {
       res.json({ message: "신청한 용병이 없습니다." });
     }
@@ -111,7 +123,7 @@ export const getMercenaryList = async (req, res, next) => {
 export const acceptMember = async (req, res, next) => {
   const member = req.body;
 
-  const test = await MercenaryModel.findOneAndUpdate(
+  const acceptedMember = await MercenaryModel.findOneAndUpdate(
     { _id: member._id },
     {
       $set: {
@@ -121,19 +133,19 @@ export const acceptMember = async (req, res, next) => {
     { new: true }
   );
 
-  if (test.isAccepted) {
-    await TeamModel.findOneAndUpdate(
+  if (acceptedMember.isAccepted) {
+    await MercenaryRecruitmentModel.findOneAndUpdate(
       { _id: member.mercenary_teamId },
       {
         $push: {
-          recruited_member: member.user_id,
+          recruitedMembers: member._id,
         },
       },
       { new: true }
     );
   }
 
-  res.status(200).json({ success: true });
+  res.status(200).json({ success: true, message: "수락 완료!" });
 };
 
 export const rejectMember = async (req, res, next) => {
@@ -155,11 +167,11 @@ export const cancelMember = async (req, res, next) => {
     { new: true }
   );
 
-  await TeamModel.findOneAndUpdate(
-    { recruited_member: member.user_id },
+  await MercenaryRecruitmentModel.findOneAndUpdate(
+    { recruitedMembers: member._id },
     {
       $pull: {
-        recruited_member: member.user_id,
+        recruitedMembers: member._id,
       },
     },
     { new: true }

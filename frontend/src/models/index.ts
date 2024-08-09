@@ -33,6 +33,7 @@ export type MercenaryLists = {
   real_name: string;
   contact: string;
   positions: string[];
+  comment: string;
   player: string | null;
   mercenary_teamId: string;
   user_id: string;

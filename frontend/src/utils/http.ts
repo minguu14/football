@@ -105,7 +105,7 @@ export async function getMercenaryLists() {
 }
 
 export async function acceptMember(member: MercenaryLists) {
-  await fetch("http://localhost:8080/acceptmember", {
+  await fetch("http://localhost:8080/api/list/acceptmember", {
     method: "PATCH",
     body: JSON.stringify(member),
     headers: {
@@ -115,7 +115,7 @@ export async function acceptMember(member: MercenaryLists) {
 }
 
 export async function rejectMember(id: string) {
-  await fetch("http://localhost:8080/rejectmember", {
+  await fetch("http://localhost:8080/api/list/rejectmember", {
     method: "DELETE",
     body: JSON.stringify({ id }),
     headers: {
@@ -125,7 +125,7 @@ export async function rejectMember(id: string) {
 }
 
 export async function cancelMember(member: MercenaryLists) {
-  await fetch("http://localhost:8080/cancelmember", {
+  await fetch("http://localhost:8080/api/list/cancelmember", {
     method: "PATCH",
     body: JSON.stringify(member),
     headers: {
