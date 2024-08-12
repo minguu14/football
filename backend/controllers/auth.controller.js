@@ -97,7 +97,7 @@ export const login = async (req, res, next) => {
         ...validUser._doc,
         password: undefined,
       },
-      process.env.ACCESS_SECRET
+      process.env.ACCESS_SECRET,
     );
 
     res.cookie("accessToken", accessToken, {

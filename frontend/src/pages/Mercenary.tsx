@@ -3,6 +3,7 @@ import { Team } from "../models";
 import { useQuery } from "@tanstack/react-query";
 import { getAllMercenaryRecruitments, queryClient } from "../utils/http";
 import { FilterButtons } from "../components/FilterButtons";
+import { FaSearch } from "react-icons/fa";
 
 export const Mercenary = () => {
   const { data, isError, error } = useQuery<Team[]>({
@@ -48,7 +49,13 @@ export const Mercenary = () => {
         <h1 className="text-5xl font-extrabold text-gray-900 mb-10 text-center">
           팀 리스트
         </h1>
-        <FilterButtons />
+        <div className="flex justify-between">
+          <FilterButtons />
+          <div className="relative">
+            <FaSearch className="absolute top-3 left-3"/>
+            <input type="text" className="border rounded-xl h-10 w-80 px-9" placeholder="원하는 내용으로 검색해주세요."/>
+          </div>
+        </div>
         {content}
       </div>
     </div>
