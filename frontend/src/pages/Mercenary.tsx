@@ -1,16 +1,24 @@
 import MercenaryCard from "../components/MercenaryCard";
 import { Team } from "../models";
 import { useQuery } from "@tanstack/react-query";
-import { getAllMercenaryRecruitments, queryClient } from "../utils/http";
+import { getMercenaryRecruitments, queryClient } from "../utils/http";
 import { FilterButtons } from "../components/FilterButtons";
 import { FaSearch } from "react-icons/fa";
+import { useState } from "react";
 
 export const Mercenary = () => {
+  const [filter, setFilter] = useState({ label: "전체", filter: "" });
   const { data, isError, error } = useQuery<Team[]>({
-    queryKey: ["recruitments"],
-    queryFn: getAllMercenaryRecruitments,
-    staleTime: 10000,
+    queryKey: ["recruitments", filter],
+    queryFn: () => getMercenaryRecruitments(filter),
   });
+
+  async function handleFilterChange(newFilter: any) {
+    setFilter(newFilter);
+    queryClient.invalidateQueries({
+      queryKey: ["recruitments", newFilter],
+    });
+  }
 
   let content;
 
@@ -50,10 +58,14 @@ export const Mercenary = () => {
           팀 리스트
         </h1>
         <div className="flex justify-between">
-          <FilterButtons />
+          <FilterButtons handleFilterChange={handleFilterChange}/>
           <div className="relative">
-            <FaSearch className="absolute top-3 left-3"/>
-            <input type="text" className="border rounded-xl h-10 w-80 px-9" placeholder="원하는 내용으로 검색해주세요."/>
+            <FaSearch className="absolute top-3 left-3" />
+            <input
+              type="text"
+              className="border rounded-xl h-10 w-80 px-9"
+              placeholder="원하는 내용으로 검색해주세요."
+            />
           </div>
         </div>
         {content}
@@ -65,6 +77,6 @@ export const Mercenary = () => {
 export const loader = async () => {
   return queryClient.fetchQuery({
     queryKey: ["recruitments"],
-    queryFn: getAllMercenaryRecruitments,
+    queryFn: () => getMercenaryRecruitments({ label: "전체", filter: "" }),
   });
 };

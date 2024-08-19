@@ -33,6 +33,8 @@ const MercenaryRecruitmentSchema = new Schema(
   { timestamps: true }
 );
 
+MercenaryRecruitmentSchema.index({ address: "text" });
+
 const MercenaryRecruitmentModel = model(
   "MercenaryRecruitment",
   MercenaryRecruitmentSchema

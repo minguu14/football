@@ -22,8 +22,8 @@ export async function register(data: FieldValues) {
   }
 }
 
-export async function getAllMercenaryRecruitments() {
-  const res = await fetch("http://localhost:8080/api/mercenary/recruitments");
+export async function getMercenaryRecruitments({ label, filter }: any) {
+  const res = await fetch(`http://localhost:8080/api/mercenary/recruitments?label=${label}&filter=${filter}`);
   if (!res.ok) {
     return json({ message: "데이터를 가져올 수 없습니다." });
   }

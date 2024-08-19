@@ -95,15 +95,28 @@ export const deleteRecruitment = async (req, res, next) => {
   }
 };
 
-export const getAllRecruitment = async (req, res, next) => {
+export const getRecruitment = async (req, res, next) => {
   try {
-    const teams = await MercenaryRecruitmentModel.find({});
-    if (!teams) {
+    const { filter, label } = req.query;
+    console.log(label);
+    let teams;
+
+    if (label === "전체") {
+      teams = await MercenaryRecruitmentModel.find({});
+    } else if (label === "지역") {
+      teams = await MercenaryRecruitmentModel.find({
+        $text: { $search: filter },
+      });
+    }
+
+    console.log(teams);
+
+    if (!teams || teams.length === 0) {
       return res
-        .status(404)
+        .status(204)
         .json({ success: false, message: "용병 모집이 없습니다." });
     }
-    res.status(200).json(teams.reverse());
+    res.status(200).json(teams);
   } catch (err) {
     return next(errorHandler(err));
   }
@@ -114,12 +127,16 @@ export const getMyRecruitment = async (req, res, next) => {
     const token = req.cookies.accessToken;
     const userInfo = jwt.verify(token, process.env.ACCESS_SECRET);
 
-    const myRecruitment = await MercenaryRecruitmentModel.find({owner: userInfo._id});
-    
-    if(myRecruitment){
+    const myRecruitment = await MercenaryRecruitmentModel.find({
+      owner: userInfo._id,
+    });
+
+    if (myRecruitment) {
       res.status(200).json(myRecruitment);
-    }else{
-      res.status(204).json({success: false, message: "모집 내역이 없습니다."});
+    } else {
+      res
+        .status(204)
+        .json({ success: false, message: "모집 내역이 없습니다." });
     }
   } catch (err) {
     return next(errorHandler(err));
