@@ -98,14 +98,17 @@ export const deleteRecruitment = async (req, res, next) => {
 export const getRecruitment = async (req, res, next) => {
   try {
     const { filter, label } = req.query;
-    console.log(label);
+    console.log(filter);
     let teams;
 
-    if (label === "전체") {
+    if (label === "전체" && filter === "all") {
       teams = await MercenaryRecruitmentModel.find({});
-    } else if (label === "지역") {
+    } else if (label === filter && filter !== "all") {
+      // teams = await MercenaryRecruitmentModel.find({
+      //   $text: { $search: filter },
+      // });
       teams = await MercenaryRecruitmentModel.find({
-        $text: { $search: filter },
+        address: { $regex: filter, $options: "i" },
       });
     }
 

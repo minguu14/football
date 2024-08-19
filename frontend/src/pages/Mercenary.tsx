@@ -7,7 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import { useState } from "react";
 
 export const Mercenary = () => {
-  const [filter, setFilter] = useState({ label: "전체", filter: "" });
+  const [filter, setFilter] = useState({ label: "전체", filter: "all" });
   const { data, isError, error } = useQuery<Team[]>({
     queryKey: ["recruitments", filter],
     queryFn: () => getMercenaryRecruitments(filter),
@@ -58,7 +58,7 @@ export const Mercenary = () => {
           팀 리스트
         </h1>
         <div className="flex justify-between">
-          <FilterButtons handleFilterChange={handleFilterChange}/>
+          <FilterButtons handleFilterChange={handleFilterChange} />
           <div className="relative">
             <FaSearch className="absolute top-3 left-3" />
             <input
@@ -75,8 +75,12 @@ export const Mercenary = () => {
 };
 
 export const loader = async () => {
+  const filter = {
+    label: "전체",
+    filter: "all",
+  };
   return queryClient.fetchQuery({
-    queryKey: ["recruitments"],
-    queryFn: () => getMercenaryRecruitments({ label: "전체", filter: "" }),
+    queryKey: ["recruitments", filter],
+    queryFn: () => getMercenaryRecruitments(filter),
   });
 };
